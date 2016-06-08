@@ -1,0 +1,11 @@
+<div>	
+	<control-pannel pannel-button-maping = "pannelButtonMaping"></control-pannel>
+	<cube-faces ng-repeat="(faceIndex,innerFaceMaping) in facesMaping" faces-position = "faceIndex" is-safari = isSafari face-dimension = "cubeDimension">
+		<div ng-repeat="(innerFaceIndex, innerFaceData) in innerFaceMaping" class = "{{innerFaceData.spinaxis}} {{innerFaceData.spin}}">
+			<cube-inner-faces face-index = "faceIndex" inner-face-index = "innerFaceIndex" inner-face-data = "innerFaceData" face-dimension = "cubeDimension" class = "{{innerFaceData.value}}">
+			</cube-inner-faces>
+		</div>
+	</cube-faces>	
+</div>
+<rotate-view-pannel></rotate-view-pannel>
+<timer></timer>

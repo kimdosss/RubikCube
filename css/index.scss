@@ -1,0 +1,518 @@
+@import "color";
+
+@mixin spin_animation($keyframe, $time) {
+
+	animation: $keyframe $time ease-in-out forwards;
+	-webkit-animation: $keyframe $time ease-in-out forwards;
+	-moz-animation: $keyframe $time ease-in-out forwards;
+	-o-animation: $keyframe $time ease-in-out forwards;
+
+}
+
+@mixin transformation($transformation) {
+	-moz-transform: $transformation;
+    -webkit-transform: $transformation;
+    -o-transform: $transformation;
+    transform: $transformation;
+}
+
+
+@mixin transform_origin($x) {
+	transform-origin: $x;
+	-webkit-transform-origin: $x;
+}
+
+@mixin keyframes_test($animationName, $frame1, $frame2) {
+	@-webkit-keyframes #{$animationName} {
+		from { -webkit-transform: $frame1; }
+		to { -webkit-transform: $frame2; }
+	}
+	@-moz-keyframes #{$animationName} {
+		from { -moz-transform: $frame1; }
+		to { -moz-transform: $frame2; }
+	}
+	@-o-keyframes #{$animationName} {
+		from { -o-transform: $frame1; }
+		to { -o-transform: $frame2; }
+	}
+	@keyframes #{$animationName} {
+		from { transform: $frame1; }
+		to { transform: $frame2; }
+	}
+}
+
+
+$animation_time: 0.15s;
+
+
+body {
+	background: #777;
+	/*overflow-y: scroll; */
+	font: 400 15px/1.8 Lato, sans-serif;
+	height: 100%;
+}
+
+
+$topbarHeight: 60px;
+.top-bar{
+	position: fixed;
+	width: 100%;
+	height: $topbarHeight;
+	z-index: 10;
+	background: #fff;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+	font-size: 20px;
+	font-weight: 600;
+	.top-bar-list-item-left{
+		display: block;
+		float: left;
+		margin: 20px;
+	}
+	.top-bar-list-item-right{
+		display: block;
+		float: right;
+		margin: 12px 50px
+	}
+}
+
+.button_pannel {
+	position: absolute;
+	margin: 20px;
+	top: $topbarHeight;
+	.button_pannel-title{
+		font-size: 15px;
+		font-weight: 600;
+	}
+	button {
+		margin-top: 5px;
+		font-weight: 600;
+	}
+	.button_pannel_area{
+		height: 70px;
+		visibility: visible;
+		opacity: 1;
+		transition: 1s;
+	}
+	.button_pannel_area_disappear{
+		height: 0;
+		opacity: 0;
+		visibility: hidden;
+		transition: 1s;
+	}
+}
+
+
+
+
+
+
+
+
+
+/* right hand system */
+/* keyframes:; spin_(xyz rotate axis)(positive negative direction)(spin parts side/top) */
+
+/* y axis */
+
+
+
+
+@include keyframes_test(spin_yn_s, rotateY(90deg), rotateY(0deg));
+
+@include keyframes_test(spin_yn_t, rotateZ(-90deg), rotateZ(0deg));
+
+@include keyframes_test(spin_yp_s, rotateY(-90deg), rotateY(0deg));
+
+@include keyframes_test(spin_yp_t, rotateZ(90deg), rotateZ(0deg));
+
+
+
+/* x axis */
+
+@include keyframes_test(spin_xp_s, rotateX(90deg), rotateX(0deg));
+
+@include keyframes_test(spin_xp_t, rotateZ(90deg), rotateZ(0deg));
+
+@include keyframes_test(spin_xn_s, rotateX(-90deg), rotateX(0deg));
+
+@include keyframes_test(spin_xn_t, rotateZ(-90deg),  rotateZ(0deg));
+
+/* z axis */
+@include keyframes_test(spin_zp_s_0, rotateX(-90deg),  rotateX(0deg));
+
+@include keyframes_test(spin_zp_s_1, rotateY(90deg), rotateY(0deg));
+
+@include keyframes_test(spin_zp_t, rotateZ(90deg), rotateZ(0deg));
+
+@include keyframes_test(spin_zn_s_0, rotateX(90deg), rotateX(0deg));
+
+@include keyframes_test(spin_zn_s_1, rotateY(-90deg), rotateY(0deg));
+
+@include keyframes_test(spin_zn_t, rotateZ(-90deg), rotateZ(0deg));
+
+
+
+/* movement notation: spin_effect_(xyz rotate axis)(positive/negative direction)_(spin parts side/top) */
+
+
+
+
+.spin_effect_yp_s {
+	@include spin_animation(spin_yp_s, $animation_time)
+}
+
+.spin_effect_yp_t {		
+	@include spin_animation(spin_yp_t, $animation_time)
+}
+
+.spin_effect_yn_s {
+	@include spin_animation(spin_yn_s, $animation_time)
+}
+
+.spin_effect_yn_t {		
+	@include spin_animation(spin_yn_t, $animation_time)
+}
+
+
+.spin_effect_xp_s {
+	@include spin_animation(spin_xp_s, $animation_time)
+}
+
+.spin_effect_xp_t {
+	@include spin_animation(spin_xp_t, $animation_time)
+}
+
+.spin_effect_xn_s {
+	@include spin_animation(spin_xn_s, $animation_time)
+}
+
+.spin_effect_xn_t {
+	@include spin_animation(spin_xn_t, $animation_time)
+}
+
+
+
+.spin_effect_zp_s_0 {
+	@include spin_animation(spin_zp_s_0, $animation_time)
+}
+
+.spin_effect_zp_s_1 {
+	@include spin_animation(spin_zp_s_1, $animation_time)
+}
+
+.spin_effect_zp_t {
+	@include spin_animation(spin_zp_t, $animation_time)
+}
+
+
+.spin_effect_zn_s_0 {
+	@include spin_animation(spin_zn_s_0, $animation_time)
+}
+
+.spin_effect_zn_s_1 {
+	@include spin_animation(spin_zn_s_1, $animation_time)
+}
+
+.spin_effect_zn_t {
+	@include spin_animation(spin_zn_t, $animation_time)
+}
+
+
+/* spin axis for 2x2cube */
+.spinaxis_d2_0{
+	@include transform_origin(100px 100px -100px);
+}
+
+.spinaxis_d2_1{
+	@include transform_origin(100px 100px 100px);
+}
+
+.spinaxis_d2_2{
+	@include transform_origin(100px 100px -100px);
+}
+
+.spinaxis_d2_3{
+	@include transform_origin(100px 100px 100px);
+}
+
+.spinaxis_d2_4{
+	@include transform_origin(100px 100px -100px);
+}
+
+.spinaxis_d2_5{
+	@include transform_origin(100px 100px 100px);
+}
+
+
+.spinaxis_d2_0_safari{
+	@include transformation(translateZ(100px));
+}
+
+.spinaxis_d2_1_safari{
+	@include transformation(translateZ(-100px));
+}
+
+.spinaxis_d2_2_safari{
+	@include transformation(translateZ(100px));
+}
+
+.spinaxis_d2_3_safari{
+	@include transformation(translateZ(-100px));
+}
+
+.spinaxis_d2_4_safari{
+	@include transformation(translateZ(100px));
+}
+
+.spinaxis_d2_5_safari{
+	@include transformation(translateZ(-100px));
+}
+
+
+
+
+/* spin axis for 3x3 cube */
+.spinaxis_d3_0{
+	@include transform_origin(150px 150px -150px);
+}
+
+.spinaxis_d3_1{
+	@include transform_origin(150px 150px 150px);
+}
+
+.spinaxis_d3_2{
+	@include transform_origin(150px 150px -150px);
+}
+
+.spinaxis_d3_3{
+	@include transform_origin(150px 150px 150px);
+}
+
+.spinaxis_d3_4{
+	@include transform_origin(150px 150px -150px);
+}
+
+.spinaxis_d3_5{
+	@include transform_origin(150px 150px 150px);
+}
+
+
+.spinaxis_d3_0_safari{
+	@include transformation(translateZ(150px));
+}
+
+.spinaxis_d3_1_safari{
+	@include transformation(translateZ(-150px));
+}
+
+.spinaxis_d3_2_safari{
+	@include transformation(translateZ(150px));
+}
+
+.spinaxis_d3_3_safari{
+	@include transformation(translateZ(-150px));
+}
+
+.spinaxis_d3_4_safari{
+	@include transformation(translateZ(150px));
+}
+
+.spinaxis_d3_5_safari{
+	@include transformation(translateZ(-150px));
+}
+
+/*
+.spinaxis_0_safari_affected{	
+	@include transform_origin(150px 150px -150px);
+}
+
+.spinaxis_1_safari_affected{
+	@include transform_origin(150px 150px 150px);
+}
+
+.spinaxis_2_safari_affected{
+	@include transform_origin(150px 150px -150px); 
+}
+
+.spinaxis_3_safari_affected{
+	@include transform_origin(150px 150px 150px);
+}
+
+.spinaxis_4_safari_affected{
+	@include transform_origin(150px 150px -150px);
+}
+
+.spinaxis_5_safari_affected{
+	@include transform_origin(150px 150px  150px);
+}
+*/
+
+
+
+
+
+cube{
+	position: absolute;
+	cursor: pointer;
+	perspective: 800px;
+    -webkit-perspective: 800px;
+    -moz-perspective: 800px;
+	margin-left: 200px;
+	margin-top: 160px;
+}
+
+
+cube-faces{
+	position: absolute;	
+	transform-style: preserve-3d;
+	-webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    z-index: 0;
+}
+
+
+
+
+
+
+
+.face0 div{
+	background: $color-1
+}
+
+
+.face1 div{
+	background: $color-2
+}
+
+.face2 div{
+	background: $color-3
+}
+
+.face3 div{
+	background: $color-4
+}
+
+.face4 div{
+	background: $color-5
+}
+
+.face5 div{
+	background: $color-6
+}
+
+
+
+.arrowx{
+	display: none;
+	position: relative;
+	transform: translateY(150px);
+	width: 500px;
+	height: 10px;
+	background: #555
+}
+
+.arrowy{
+	display: none;
+	position: absolute;
+	transform: translateX(-150px) rotateZ(90deg);
+	width: 500px;
+	height: 10px;
+	background: #000
+}
+
+.arrowz{
+	display: none;
+	position: absolute;
+	transform: translateY(150px) translateZ(150px) rotateY(90deg);
+	width: 500px;
+	height: 10px;
+	background: red
+}
+
+
+control-Pannel{
+	margin: 50px;
+	position: absolute;
+	z-index: 30;
+	/*@include transformation(translateX(-125px) translateY(-110px) translateZ(150px));*/
+	transform-style: preserve-3d;
+	-webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+}
+
+
+
+.button-group-0 {
+	@include transformation(translateX(20px) translateY(0px));	
+	position: absolute;
+	z-index: 10;
+
+}
+
+.button-group-1 {
+	@include transformation(rotateZ(180deg) rotateX(180deg) translateX(-380px) translateY(0px));	
+	position: absolute;
+	z-index: 10;
+
+}
+
+.button-group-2 {
+	@include transformation(rotateZ(90deg) translateX(-125px) translateY(-245px));	
+	position: absolute;
+	z-index: 10;
+
+}
+
+.button-group-3 {
+	@include transformation(rotateZ(270deg) rotateX(180deg) translateX(-235px) translateY(-250px));	
+	position: absolute;
+	z-index: 10;
+
+}
+
+.button-group-4 {
+	@include transformation(rotateX(90deg) rotateZ(180deg) translateX(-380px) translateY(112px) translateZ(90px));	
+	position: absolute;
+	z-index: 10;
+}
+
+.button-group-5 {
+	@include transformation(rotateX(270deg) translateX(20px) translateY(110px) translateZ(-90px));	
+	position: absolute;
+	z-index: 10;
+}
+
+control-pannel-button{
+	display: block;
+	width: 50px;
+	height: 50px;
+	margin-top: 55px;
+	font-size: 60px;
+	transition: 0.5s ease-in-out;
+	-webkit-transition: 0.5s ease-in-out;
+	-moz-transition: 0.5s ease-in-out;
+	z-index: 10;
+}
+
+.control-pannel-button-hover{
+	color: #B81D18;
+
+}
+
+
+
+
+.button_pannel{
+	position: absolute;
+    margin-left: 175px;
+    margin-top: 550px;
+    .button_pannel_show{
+    	margin-left: 50px;
+    }
+    #button_pannel_container{
+    	width: 580px;
+    }
+}
+
+

@@ -1,0 +1,4 @@
+<control-pannel-button-group ng-repeat="buttongroup in pannelButtonMaping" button-position = "buttongroup[0].buttonPosition" button-number = "buttongroup[0].cubeDimension">
+	<control-pannel-button ng-repeat="values in buttongroup" button-function = "Rotate(axis, direction, layer)" values = "values">
+	</control-pannel-button>
+</control-pannel-button-group>

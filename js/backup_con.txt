@@ -1,0 +1,353 @@
+var appCon = angular.module('appCon', []);
+
+appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
+	//$scope.facesPosition = ['front', 'back', 'top', 'bottom', 'left', 'right'];
+	//$scope.innerFacesPosition = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
+	animation_time = 500;
+
+	$scope.facesMaping = [];
+	for (var i = 0; i < 6; i++) {
+		$scope.facesMaping[i] = [];
+		for (var j = 0; j < 9; j++) {
+			var facevalue = 'face' + i;
+			$scope.facesMaping[i][j] = {value: facevalue, spin: ''};
+		}
+	}
+
+	$scope.rotate1 = function() {
+		$scope.RotateSetData1();
+		$scope.RotateMovement1();
+		/*
+		'-moz-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg)',
+        '-webkit-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg)',
+        '-o-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg)',
+        '-ms-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg)',
+*/
+
+		
+
+		$timeout(function () {
+      		$scope.CompleteMovement();
+  		}, animation_time);
+		
+
+	}
+
+	
+
+
+	$scope.RotateSetData1 = function() {
+		for (var i = 0; i < 3; i++) {
+			var store = $scope.facesMaping[0][i].value;
+			$scope.facesMaping[0][i].value = $scope.facesMaping[5][i].value;
+			$scope.facesMaping[5][i].value = $scope.facesMaping[1][i].value;
+			$scope.facesMaping[1][i].value = $scope.facesMaping[4][i].value;
+			$scope.facesMaping[4][i].value = store;			
+		}
+
+		//corner
+
+		var store = $scope.facesMaping[2][0].value;	
+		$scope.facesMaping[2][0].value = $scope.facesMaping[2][6].value;
+		$scope.facesMaping[2][6].value = $scope.facesMaping[2][8].value;
+		$scope.facesMaping[2][8].value = $scope.facesMaping[2][2].value;
+		$scope.facesMaping[2][2].value = store;
+
+		//edge
+		store = $scope.facesMaping[2][1].value;
+		$scope.facesMaping[2][1].value = $scope.facesMaping[2][3].value;
+		$scope.facesMaping[2][3].value = $scope.facesMaping[2][7].value;
+		$scope.facesMaping[2][7].value = $scope.facesMaping[2][5].value;
+		$scope.facesMaping[2][5].value = store;
+
+
+	}
+
+	$scope.RotateMovement1 = function() {
+		spin_faces_side = [
+			{face: 0, innerface: 0},
+			{face: 0, innerface: 1},
+			{face: 0, innerface: 2},
+			{face: 1, innerface: 0},
+			{face: 1, innerface: 1},
+			{face: 1, innerface: 2},
+			{face: 4, innerface: 0},
+			{face: 4, innerface: 1},
+			{face: 4, innerface: 2},
+			{face: 5, innerface: 0},
+			{face: 5, innerface: 1},
+			{face: 5, innerface: 2},		
+		]
+		spin_faces_top = [
+			{face: 2, innerface: 0},
+			{face: 2, innerface: 1},
+			{face: 2, innerface: 2},
+			{face: 2, innerface: 3},
+			{face: 2, innerface: 4},
+			{face: 2, innerface: 5},
+			{face: 2, innerface: 6},
+			{face: 2, innerface: 7},
+			{face: 2, innerface: 8}
+		
+		]
+
+		for (var i = 0; i < spin_faces_side.length; i++) {
+			var x = spin_faces_side[i].face, y = spin_faces_side[i].innerface;
+			$scope.facesMaping[x][y].spin = 'spin_effect_yns'
+
+		}
+		
+		for (var i = 0; i < spin_faces_top.length; i++) {
+			var x = spin_faces_top[i].face, y = spin_faces_top[i].innerface;
+			$scope.facesMaping[x][y].spin = 'spin_effect_ynt';
+
+		}
+
+	}
+
+
+
+
+
+	$scope.rotate2 = function() {
+		$scope.RotateSetData2();
+		$scope.RotateMovement2();
+		$timeout(function () {
+      		$scope.CompleteMovement();
+  		}, animation_time);
+		
+
+	}
+
+	$scope.RotateSetData2 = function() {
+
+
+		//side
+		var store = $scope.facesMaping[0][0].value;
+		var store1 = $scope.facesMaping[0][3].value;
+		var store2 = $scope.facesMaping[0][6].value;
+
+
+		$scope.facesMaping[0][0].value = $scope.facesMaping[2][0].value;
+		$scope.facesMaping[0][3].value = $scope.facesMaping[2][3].value;
+		$scope.facesMaping[0][6].value = $scope.facesMaping[2][6].value;
+
+		$scope.facesMaping[2][0].value = $scope.facesMaping[1][8].value;
+		$scope.facesMaping[2][3].value = $scope.facesMaping[1][5].value;
+		$scope.facesMaping[2][6].value = $scope.facesMaping[1][2].value;
+
+		$scope.facesMaping[1][8].value = $scope.facesMaping[3][0].value;
+		$scope.facesMaping[1][5].value = $scope.facesMaping[3][3].value;
+		$scope.facesMaping[1][2].value = $scope.facesMaping[3][6].value;
+
+		$scope.facesMaping[3][0].value = store;
+		$scope.facesMaping[3][3].value = store1;
+		$scope.facesMaping[3][6].value = store2;
+
+
+
+		//top
+		//corner
+
+		store = $scope.facesMaping[4][0].value;	
+		$scope.facesMaping[4][0].value = $scope.facesMaping[4][2].value;
+		$scope.facesMaping[4][2].value = $scope.facesMaping[4][8].value;
+		$scope.facesMaping[4][8].value = $scope.facesMaping[4][6].value;
+		$scope.facesMaping[4][6].value = store;
+
+		//edge
+		store = $scope.facesMaping[4][1].value;
+		$scope.facesMaping[4][1].value = $scope.facesMaping[4][5].value;
+		$scope.facesMaping[4][5].value = $scope.facesMaping[4][7].value;
+		$scope.facesMaping[4][7].value = $scope.facesMaping[4][3].value;
+		$scope.facesMaping[4][3].value = store;
+
+	}
+
+
+
+	$scope.RotateMovement2 = function() {
+		spin_faces_side = [
+			{face: 0, innerface: 0},
+			{face: 0, innerface: 3},
+			{face: 0, innerface: 6},
+			{face: 2, innerface: 0},
+			{face: 2, innerface: 3},
+			{face: 2, innerface: 6},
+			{face: 1, innerface: 2},
+			{face: 1, innerface: 5},
+			{face: 1, innerface: 8},
+			{face: 3, innerface: 0},
+			{face: 3, innerface: 3},
+			{face: 3, innerface: 6},		
+		]
+		spin_faces_top = [
+			{face: 4, innerface: 0},
+			{face: 4, innerface: 1},
+			{face: 4, innerface: 2},
+			{face: 4, innerface: 3},
+			{face: 4, innerface: 4},
+			{face: 4, innerface: 5},
+			{face: 4, innerface: 6},
+			{face: 4, innerface: 7},
+			{face: 4, innerface: 8}
+		
+		]
+
+		for (var i = 0; i < spin_faces_side.length; i++) {
+			var x = spin_faces_side[i].face, y = spin_faces_side[i].innerface;
+			$scope.facesMaping[x][y].spin = 'spin_effect_xps'
+
+		}
+		
+		for (var i = 0; i < spin_faces_top.length; i++) {
+			var x = spin_faces_top[i].face, y = spin_faces_top[i].innerface;
+			$scope.facesMaping[x][y].spin = 'spin_effect_xpt';
+
+		}
+
+	}
+
+
+
+
+
+
+	$scope.CompleteMovement = function() {
+		var complete = true;
+		for (var i = 0; i < 6; i++) {
+			for (var j = 0; j < 9; j++) {
+				$scope.facesMaping[i][j].spin = '';
+				//check whether complete
+				if (j != 0) {
+					if ($scope.facesMaping[i][j].value != $scope.facesMaping[i][j-1].value) {
+						complete = false
+					}
+					
+				}
+			}
+		}
+		if (complete) {
+			console.log(complete);
+		}
+		
+	}
+
+
+
+
+}])
+
+
+
+
+$scope.rotate2 = function() {
+		$scope.RotateSetData2();
+		$scope.RotateMovement2();
+		$timeout(function () {
+      		$scope.CompleteMovement();
+  		}, animation_time);
+		
+
+	}
+
+	
+	$scope.RotateSetData2 = function() {
+
+		//data flow
+		RotateData = [
+		//side faces
+			[
+				{face: 0, innerface: 0}, 
+				{face: 2, innerface: 0}, 
+				{face: 1, innerface: 6}, 
+				{face: 3, innerface: 6}, 
+
+			],
+
+			[
+				{face: 0, innerface: 3}, 
+				{face: 2, innerface: 3}, 
+				{face: 1, innerface: 3}, 
+				{face: 3, innerface: 3}, 
+
+			],
+
+			[
+				{face: 0, innerface: 6}, 
+				{face: 2, innerface: 6}, 
+				{face: 1, innerface: 0}, 
+				{face: 3, innerface: 0}, 
+
+			],
+			//top faces
+			[
+				{face: 5, innerface: 0}, 
+				{face: 5, innerface: 2}, 
+				{face: 5, innerface: 8}, 
+				{face: 5, innerface: 6}, 
+
+			],
+
+			[
+				{face: 5, innerface: 1}, 
+				{face: 5, innerface: 5}, 
+				{face: 5, innerface: 7}, 
+				{face: 5, innerface: 3}, 
+
+			],
+			//top central inner face
+			[
+				{face: 5, innerface: 4}
+			]
+		];
+
+		$scope.RotateDataPositive(RotateData)
+	}
+
+
+	$scope.RotateMovement2 = function() {
+		spin_faces_side = [
+			{face: 0, innerface: 0},
+			{face: 0, innerface: 3},
+			{face: 0, innerface: 6},
+			{face: 2, innerface: 0},
+			{face: 2, innerface: 3},
+			{face: 2, innerface: 6},
+			{face: 1, innerface: 0},
+			{face: 1, innerface: 3},
+			{face: 1, innerface: 6},
+			{face: 3, innerface: 0},
+			{face: 3, innerface: 3},
+			{face: 3, innerface: 6},		
+		]
+		spin_faces_top = [
+			{face: 5, innerface: 0},
+			{face: 5, innerface: 1},
+			{face: 5, innerface: 2},
+			{face: 5, innerface: 3},
+			{face: 5, innerface: 4},
+			{face: 5, innerface: 5},
+			{face: 5, innerface: 6},
+			{face: 5, innerface: 7},
+			{face: 5, innerface: 8}
+		
+		]
+
+		for (var i = 0; i < spin_faces_side.length; i++) {
+			var x = spin_faces_side[i].face, y = spin_faces_side[i].innerface;
+			$scope.facesMaping[x][y].spin = 'spin_effect_xps'
+
+		}
+		
+		for (var i = 0; i < spin_faces_top.length; i++) {
+			var x = spin_faces_top[i].face, y = spin_faces_top[i].innerface;
+			$scope.facesMaping[x][y].spin = 'spin_effect_xpt';
+
+		}
+
+	}
+
+
+
