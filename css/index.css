@@ -4,6 +4,10 @@ body {
   font: 400 15px/1.8 Lato, sans-serif;
   height: 100%; }
 
+.main_area {
+  position: absolute;
+  margin-left: 20px; }
+
 .top-bar {
   position: fixed;
   width: 100%;
@@ -21,27 +25,6 @@ body {
     display: block;
     float: right;
     margin: 12px 50px; }
-
-.button_pannel {
-  position: absolute;
-  margin: 20px;
-  top: 60px; }
-  .button_pannel .button_pannel-title {
-    font-size: 15px;
-    font-weight: 600; }
-  .button_pannel button {
-    margin-top: 5px;
-    font-weight: 600; }
-  .button_pannel .button_pannel_area {
-    height: 70px;
-    visibility: visible;
-    opacity: 1;
-    transition: 1s; }
-  .button_pannel .button_pannel_area_disappear {
-    height: 0;
-    opacity: 0;
-    visibility: hidden;
-    transition: 1s; }
 
 /* right hand system */
 /* keyframes:; spin_(xyz rotate axis)(positive negative direction)(spin parts side/top) */
@@ -330,88 +313,88 @@ body {
     transform: rotateZ(0deg); } }
 /* movement notation: spin_effect_(xyz rotate axis)(positive/negative direction)_(spin parts side/top) */
 .spin_effect_yp_s {
-  animation: spin_yp_s 0.15s ease-in-out forwards;
-  -webkit-animation: spin_yp_s 0.15s ease-in-out forwards;
-  -moz-animation: spin_yp_s 0.15s ease-in-out forwards;
-  -o-animation: spin_yp_s 0.15s ease-in-out forwards; }
+  animation: spin_yp_s 0.1s ease-in-out forwards;
+  -webkit-animation: spin_yp_s 0.1s ease-in-out forwards;
+  -moz-animation: spin_yp_s 0.1s ease-in-out forwards;
+  -o-animation: spin_yp_s 0.1s ease-in-out forwards; }
 
 .spin_effect_yp_t {
-  animation: spin_yp_t 0.15s ease-in-out forwards;
-  -webkit-animation: spin_yp_t 0.15s ease-in-out forwards;
-  -moz-animation: spin_yp_t 0.15s ease-in-out forwards;
-  -o-animation: spin_yp_t 0.15s ease-in-out forwards; }
+  animation: spin_yp_t 0.1s ease-in-out forwards;
+  -webkit-animation: spin_yp_t 0.1s ease-in-out forwards;
+  -moz-animation: spin_yp_t 0.1s ease-in-out forwards;
+  -o-animation: spin_yp_t 0.1s ease-in-out forwards; }
 
 .spin_effect_yn_s {
-  animation: spin_yn_s 0.15s ease-in-out forwards;
-  -webkit-animation: spin_yn_s 0.15s ease-in-out forwards;
-  -moz-animation: spin_yn_s 0.15s ease-in-out forwards;
-  -o-animation: spin_yn_s 0.15s ease-in-out forwards; }
+  animation: spin_yn_s 0.1s ease-in-out forwards;
+  -webkit-animation: spin_yn_s 0.1s ease-in-out forwards;
+  -moz-animation: spin_yn_s 0.1s ease-in-out forwards;
+  -o-animation: spin_yn_s 0.1s ease-in-out forwards; }
 
 .spin_effect_yn_t {
-  animation: spin_yn_t 0.15s ease-in-out forwards;
-  -webkit-animation: spin_yn_t 0.15s ease-in-out forwards;
-  -moz-animation: spin_yn_t 0.15s ease-in-out forwards;
-  -o-animation: spin_yn_t 0.15s ease-in-out forwards; }
+  animation: spin_yn_t 0.1s ease-in-out forwards;
+  -webkit-animation: spin_yn_t 0.1s ease-in-out forwards;
+  -moz-animation: spin_yn_t 0.1s ease-in-out forwards;
+  -o-animation: spin_yn_t 0.1s ease-in-out forwards; }
 
 .spin_effect_xp_s {
-  animation: spin_xp_s 0.15s ease-in-out forwards;
-  -webkit-animation: spin_xp_s 0.15s ease-in-out forwards;
-  -moz-animation: spin_xp_s 0.15s ease-in-out forwards;
-  -o-animation: spin_xp_s 0.15s ease-in-out forwards; }
+  animation: spin_xp_s 0.1s ease-in-out forwards;
+  -webkit-animation: spin_xp_s 0.1s ease-in-out forwards;
+  -moz-animation: spin_xp_s 0.1s ease-in-out forwards;
+  -o-animation: spin_xp_s 0.1s ease-in-out forwards; }
 
 .spin_effect_xp_t {
-  animation: spin_xp_t 0.15s ease-in-out forwards;
-  -webkit-animation: spin_xp_t 0.15s ease-in-out forwards;
-  -moz-animation: spin_xp_t 0.15s ease-in-out forwards;
-  -o-animation: spin_xp_t 0.15s ease-in-out forwards; }
+  animation: spin_xp_t 0.1s ease-in-out forwards;
+  -webkit-animation: spin_xp_t 0.1s ease-in-out forwards;
+  -moz-animation: spin_xp_t 0.1s ease-in-out forwards;
+  -o-animation: spin_xp_t 0.1s ease-in-out forwards; }
 
 .spin_effect_xn_s {
-  animation: spin_xn_s 0.15s ease-in-out forwards;
-  -webkit-animation: spin_xn_s 0.15s ease-in-out forwards;
-  -moz-animation: spin_xn_s 0.15s ease-in-out forwards;
-  -o-animation: spin_xn_s 0.15s ease-in-out forwards; }
+  animation: spin_xn_s 0.1s ease-in-out forwards;
+  -webkit-animation: spin_xn_s 0.1s ease-in-out forwards;
+  -moz-animation: spin_xn_s 0.1s ease-in-out forwards;
+  -o-animation: spin_xn_s 0.1s ease-in-out forwards; }
 
 .spin_effect_xn_t {
-  animation: spin_xn_t 0.15s ease-in-out forwards;
-  -webkit-animation: spin_xn_t 0.15s ease-in-out forwards;
-  -moz-animation: spin_xn_t 0.15s ease-in-out forwards;
-  -o-animation: spin_xn_t 0.15s ease-in-out forwards; }
+  animation: spin_xn_t 0.1s ease-in-out forwards;
+  -webkit-animation: spin_xn_t 0.1s ease-in-out forwards;
+  -moz-animation: spin_xn_t 0.1s ease-in-out forwards;
+  -o-animation: spin_xn_t 0.1s ease-in-out forwards; }
 
 .spin_effect_zp_s_0 {
-  animation: spin_zp_s_0 0.15s ease-in-out forwards;
-  -webkit-animation: spin_zp_s_0 0.15s ease-in-out forwards;
-  -moz-animation: spin_zp_s_0 0.15s ease-in-out forwards;
-  -o-animation: spin_zp_s_0 0.15s ease-in-out forwards; }
+  animation: spin_zp_s_0 0.1s ease-in-out forwards;
+  -webkit-animation: spin_zp_s_0 0.1s ease-in-out forwards;
+  -moz-animation: spin_zp_s_0 0.1s ease-in-out forwards;
+  -o-animation: spin_zp_s_0 0.1s ease-in-out forwards; }
 
 .spin_effect_zp_s_1 {
-  animation: spin_zp_s_1 0.15s ease-in-out forwards;
-  -webkit-animation: spin_zp_s_1 0.15s ease-in-out forwards;
-  -moz-animation: spin_zp_s_1 0.15s ease-in-out forwards;
-  -o-animation: spin_zp_s_1 0.15s ease-in-out forwards; }
+  animation: spin_zp_s_1 0.1s ease-in-out forwards;
+  -webkit-animation: spin_zp_s_1 0.1s ease-in-out forwards;
+  -moz-animation: spin_zp_s_1 0.1s ease-in-out forwards;
+  -o-animation: spin_zp_s_1 0.1s ease-in-out forwards; }
 
 .spin_effect_zp_t {
-  animation: spin_zp_t 0.15s ease-in-out forwards;
-  -webkit-animation: spin_zp_t 0.15s ease-in-out forwards;
-  -moz-animation: spin_zp_t 0.15s ease-in-out forwards;
-  -o-animation: spin_zp_t 0.15s ease-in-out forwards; }
+  animation: spin_zp_t 0.1s ease-in-out forwards;
+  -webkit-animation: spin_zp_t 0.1s ease-in-out forwards;
+  -moz-animation: spin_zp_t 0.1s ease-in-out forwards;
+  -o-animation: spin_zp_t 0.1s ease-in-out forwards; }
 
 .spin_effect_zn_s_0 {
-  animation: spin_zn_s_0 0.15s ease-in-out forwards;
-  -webkit-animation: spin_zn_s_0 0.15s ease-in-out forwards;
-  -moz-animation: spin_zn_s_0 0.15s ease-in-out forwards;
-  -o-animation: spin_zn_s_0 0.15s ease-in-out forwards; }
+  animation: spin_zn_s_0 0.1s ease-in-out forwards;
+  -webkit-animation: spin_zn_s_0 0.1s ease-in-out forwards;
+  -moz-animation: spin_zn_s_0 0.1s ease-in-out forwards;
+  -o-animation: spin_zn_s_0 0.1s ease-in-out forwards; }
 
 .spin_effect_zn_s_1 {
-  animation: spin_zn_s_1 0.15s ease-in-out forwards;
-  -webkit-animation: spin_zn_s_1 0.15s ease-in-out forwards;
-  -moz-animation: spin_zn_s_1 0.15s ease-in-out forwards;
-  -o-animation: spin_zn_s_1 0.15s ease-in-out forwards; }
+  animation: spin_zn_s_1 0.1s ease-in-out forwards;
+  -webkit-animation: spin_zn_s_1 0.1s ease-in-out forwards;
+  -moz-animation: spin_zn_s_1 0.1s ease-in-out forwards;
+  -o-animation: spin_zn_s_1 0.1s ease-in-out forwards; }
 
 .spin_effect_zn_t {
-  animation: spin_zn_t 0.15s ease-in-out forwards;
-  -webkit-animation: spin_zn_t 0.15s ease-in-out forwards;
-  -moz-animation: spin_zn_t 0.15s ease-in-out forwards;
-  -o-animation: spin_zn_t 0.15s ease-in-out forwards; }
+  animation: spin_zn_t 0.1s ease-in-out forwards;
+  -webkit-animation: spin_zn_t 0.1s ease-in-out forwards;
+  -moz-animation: spin_zn_t 0.1s ease-in-out forwards;
+  -o-animation: spin_zn_t 0.1s ease-in-out forwards; }
 
 /* spin axis for 2x2cube */
 .spinaxis_d2_0 {
@@ -535,39 +518,14 @@ body {
   -o-transform: translateZ(-150px);
   transform: translateZ(-150px); }
 
-/*
-.spinaxis_0_safari_affected{	
-	@include transform_origin(150px 150px -150px);
-}
-
-.spinaxis_1_safari_affected{
-	@include transform_origin(150px 150px 150px);
-}
-
-.spinaxis_2_safari_affected{
-	@include transform_origin(150px 150px -150px); 
-}
-
-.spinaxis_3_safari_affected{
-	@include transform_origin(150px 150px 150px);
-}
-
-.spinaxis_4_safari_affected{
-	@include transform_origin(150px 150px -150px);
-}
-
-.spinaxis_5_safari_affected{
-	@include transform_origin(150px 150px  150px);
-}
-*/
 cube {
   position: absolute;
   cursor: pointer;
   perspective: 800px;
   -webkit-perspective: 800px;
   -moz-perspective: 800px;
-  margin-left: 200px;
-  margin-top: 160px; }
+  margin-left: 100px;
+  margin-top: 150px; }
 
 cube-faces {
   position: absolute;
@@ -679,8 +637,8 @@ control-pannel-button {
   display: block;
   width: 50px;
   height: 50px;
-  margin-top: 55px;
-  font-size: 60px;
+  margin-top: 50px;
+  font-size: 70px;
   transition: 0.5s ease-in-out;
   -webkit-transition: 0.5s ease-in-out;
   -moz-transition: 0.5s ease-in-out;
@@ -691,11 +649,28 @@ control-pannel-button {
 
 .button_pannel {
   position: absolute;
-  margin-left: 175px;
-  margin-top: 550px; }
+  margin-top: 10px;
+  margin-left: 680px;
+  top: 60px; }
+  .button_pannel .button_pannel-title {
+    font-size: 15px;
+    font-weight: 600; }
+  .button_pannel button {
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: 600; }
+  .button_pannel .button_pannel_area {
+    visibility: visible;
+    opacity: 1;
+    transition: 1s; }
+  .button_pannel .button_pannel_area_disappear {
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: 1s; }
   .button_pannel .button_pannel_show {
-    margin-left: 50px; }
+    margin-left: 10px; }
   .button_pannel #button_pannel_container {
-    width: 580px; }
+    width: 300px; }
 
 /*# sourceMappingURL=index.css.map */

@@ -2,15 +2,17 @@ var appCon = angular.module('appCon', []);
 
 appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 	//necessary varibles
-	$scope.animation_process_time = 200;
+	$scope.animation_process_time = 250;
+	$scope.isProcessing = false;
+	$scope.faceNum = 6;
 	$scope.cubeDimension = 3;
+	$scope.disableAimation = false;
 	$scope.innerFacesNum = $scope.cubeDimension * $scope.cubeDimension;
 
-
-
+	//check browser
 	var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
 	var is_safari = navigator.userAgent.indexOf("Safari") > -1;
-	if ((is_chrome)&&(is_safari)) {
+	if ((is_chrome) && (is_safari)) {
 		$scope.isSafari = false;
 	} else {
 		$scope.isSafari = true;
@@ -18,394 +20,156 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 
 	$scope.isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
 
-
 	$scope.ResetCube = function() {
 		$scope.facesMaping = [];
 		var cubeDimension = $scope.cubeDimension;
-		for (var i = 0; i < 6; i++) {
+		for (var i = 0; i < $scope.faceNum; i++) {
 			$scope.facesMaping[i] = [];
 			for (var j = 0; j < cubeDimension * cubeDimension; j++) {
 				var facevalue = 'face' + i;
-				if ($scope.isSafari) {
-					var spinaxis = 'spinaxis_d' + cubeDimension + '_' + i + '_safari';
-				} else {
-					var spinaxis = 'spinaxis_d' + cubeDimension + '_' + i;
-				}
 				var faceid = i + '-' + j;
-				$scope.facesMaping[i][j] = {value: facevalue, id: faceid, spin: '', spinaxis: spinaxis};
-
+				$scope.facesMaping[i][j] = {value: facevalue, id: faceid, spin: ''};
 			}
 		}
 
-		$scope.pannelButtonMaping = [];
-		for (var i = 0; i < 6; i++) {
+		$scope.cubeButtonMaping = [];
+		for (var i = 0; i < $scope.faceNum; i++) {
 			var axis, direction, layer;
 			var dimension = $scope.cubeDimension;
-			$scope.pannelButtonMaping[i] = [];
+			$scope.cubeButtonMaping[i] = [];
 			for (var j = 0; j < dimension; j++) {
-				if (dimension == 2) {
-					switch (j) {
-				    case 0:
-						layer = 't'
-				        break;
-				    case 1:
-						layer = 'b'
-				        break;
-				    }
-				}
-
-				if (dimension == 3) {
-					switch (j) {
-				    case 0:
-						layer = 't'
-				        break;
-				    case 1:
-						layer = 'm'
-				        break;   
-				    case 2:
-						layer = 'b'
-				        break;
-				    }				
-
-				}	
+				layer = j;				
 				
-				switch (i) {
-				case 0:
-					axis = 'y';
+				if (i % 2 == 0) {
 					direction = 'n';
-				    break;
-				case 1:
-					axis = 'y';
+				} else {
 					direction = 'p'
-				    break;   
-				case 2:
-					axis = 'x';
-					direction = 'n'
-					break;
-				case 3:
-					axis = 'x';
-					direction = 'p'
-				    break;
-				case 4:
-					axis = 'z';
-					direction = 'n'
-				    break;   
-				case 5:
-					axis = 'z';
-					direction = 'p'
-				    break;
-				default:
-					console.log('pannelButtonMaping error');
 				}
 
+				if (i == 0 || i == 1) {
+					axis = 'y';
+				} else if (i == 2 || i == 3) {
+					axis = 'x';
+				} else {
+					axis = 'z';
+				}
 
 				var controlValue = {axis: axis, direction: direction, layer: layer};
 
-				$scope.pannelButtonMaping[i][j] = {buttonPosition: i, row: j, value: controlValue, cubeDimension: dimension};
+				$scope.cubeButtonMaping[i][j] = {buttonPosition: i, row: j, value: controlValue, cubeDimension: dimension};
 			}
 
 		}
 
+		$scope.pannelButtonMaping0 = [];
+		var faceNotations = ['U', 'L', 'F', 'R', 'B', 'D'];
+		var buttonRows = Math.floor($scope.cubeDimension / 2);
+		for (var i = 0; i < buttonRows; i++) {
+			$scope.pannelButtonMaping0[i] = [];
+			for (var j = 0; j < faceNotations.length; j++) {
+				var buttonIndex = i + 1;
+				var buttonvalue = faceNotations[j] + buttonIndex;
+				$scope.pannelButtonMaping0[i][j] = {value: buttonvalue};
+			}
+		}
+
+		$scope.pannelButtonMaping1 = [];
+		for (var i = 0; i < buttonRows; i++) {
+			$scope.pannelButtonMaping1[i] = [];
+			for (var j = 0; j < faceNotations.length; j++) {
+				var buttonIndex = i + 1;
+				var buttonvalue = faceNotations[j] + buttonIndex + '`';
+				$scope.pannelButtonMaping1[i][j] = {value: buttonvalue};
+			}
+		}
+
+		if ($scope.cubeDimension % 2 !== 0) {
+			$scope.pannelButtonMaping2 = [];
+			$scope.pannelButtonMaping2[1] = [];
+			var faceNotations = ['M', 'E', 'S'];		
+			for (var i = 0; i < faceNotations.length * 2; i++) {
+				if (i < faceNotations.length) {
+					var buttonvalue = faceNotations[i];				
+				} else {
+					var sign = '`';
+					var buttonvalue = faceNotations[i - faceNotations.length] + sign;	
+				}			
+				$scope.pannelButtonMaping2[1][i] = {value: buttonvalue};
+			}
+		}	
+
+		$scope.pannelButtonMaping3 = [];
+		$scope.pannelButtonMaping3[1] = [];
+		var faceNotations = ['X', 'Y', 'Z'];		
+		for (var i = 0; i < faceNotations.length * 2; i++) {
+			if (i < faceNotations.length) {
+				var buttonvalue = faceNotations[i];				
+			} else {
+				var sign = '`';
+				var buttonvalue = faceNotations[i - faceNotations.length] + sign;	
+			}			
+			$scope.pannelButtonMaping3[1][i] = {value: buttonvalue};
+		}
 	}
 	$scope.ResetCube();
 
-	
-
-
 	//Notation convert
 	$scope.Notation = function(notation) {
-		var axis, direction, layer;
-		if ($scope.cubeDimension  == 2) {
-			switch (notation) {
-			//single turn
-			case 'U`':
-		        axis = 'y';
-				direction = 'p';
-				layer = 't';			
-		        break;
-		    case 'U':
-		        axis = 'y';
-				direction = 'n';
-				layer = 't'
-		        break;
-		    case 'D':
-		        axis = 'y';
-				direction = 'p';
-				layer = 'b'
-		        break;
-		    case 'D`':
-		        axis = 'y';
-				direction = 'n';
-				layer = 'b'
-		        break;
-		    case 'R`':
-		        axis = 'x';
-				direction = 'p';
-				layer = 't'
-		        break;
-		    case 'R':
-		        axis = 'x';
-				direction = 'n';
-				layer = 't'
-		        break;
-			case 'L':
-		        axis = 'x';
-				direction = 'p';
-				layer = 'b'
-				break;
-			case 'L`':
-		        axis = 'x';
-				direction = 'n';
-				layer = 'b'
-				break;
-			case 'F`':
-		        axis = 'z';
-				direction = 'p';
-				layer = 't'
-				break;
-			case 'F':
-		        axis = 'z';
-				direction = 'n';
-				layer = 't'
-				break;
-			case 'B':
-		        axis = 'z';
-				direction = 'p';
-				layer = 'b'
-				break;
-			case 'B`':
-		        axis = 'z';
-				direction = 'n';
-				layer = 'b'
-				break;
-			//whole rotate
-		    case 'X':
-		        axis = 'x';
-				direction = 'n';
-				break;	
-			case 'X`':
-		        axis = 'x';
-				direction = 'p';
-				break;	
-			case 'Y':
-		        axis = 'y';
-				direction = 'n';
-				break;	
-			case 'Y`':
-		        axis = 'y';
-				direction = 'p';
-				break;	
-			case 'Z':
-		        axis = 'z';
-				direction = 'n';
-				break;
-			case 'Z`':
-		        axis = 'z';
-				direction = 'p';
-				break;
-			default:
-				console.log('Notation() error');			
-			}
-
-		}
-
-
-		if ($scope.cubeDimension  == 3) {
-			switch (notation) {
-			//single turn
-		    case 'U`':
-		        axis = 'y';
-				direction = 'p';
-				layer = 't';			
-		        break;
-
-		    case 'U':
-		        axis = 'y';
-				direction = 'n';
-				layer = 't'
-		        break;
-
-		    case 'E':
-		        axis = 'y';
-				direction = 'p';
-				layer = 'm'
-		        break;
-
-		    case 'E`':
-		        axis = 'y';
-				direction = 'n';
-				layer = 'm'
-		        break;
-
-		    case 'D':
-		        axis = 'y';
-				direction = 'p';
-				layer = 'b'
-		        break;
-
-		    case 'D`':
-		        axis = 'y';
-				direction = 'n';
-				layer = 'b'
-		        break;
-
-		    case 'R`':
-		        axis = 'x';
-				direction = 'p';
-				layer = 't'
-		        break;
-
-		    case 'R':
-		        axis = 'x';
-				direction = 'n';
-				layer = 't'
-		        break;
-
-		    case 'M':
-		        axis = 'x';
-				direction = 'p';
-				layer = 'm'
-				break;	
-			case 'M`':
-		        axis = 'x';
-				direction = 'n';
-				layer = 'm'
-				break;
-			case 'L':
-		        axis = 'x';
-				direction = 'p';
-				layer = 'b'
-				break;
-			case 'L`':
-		        axis = 'x';
-				direction = 'n';
-				layer = 'b'
-				break;
-
-			case 'F`':
-		        axis = 'z';
-				direction = 'p';
-				layer = 't'
-				break;
-			case 'F':
-		        axis = 'z';
-				direction = 'n';
-				layer = 't'
-				break;
-			case 'S':
-		        axis = 'z';
-				direction = 'p';
-				layer = 'm'
-				break;
-			case 'S`':
-		        axis = 'z';
-				direction = 'n';
-				layer = 'm'
-				break;
-			case 'B':
-		        axis = 'z';
-				direction = 'p';
-				layer = 'b'
-				break;
-			case 'B`':
-		        axis = 'z';
-				direction = 'n';
-				layer = 'b'
-				break;
-			//double turn
-			case 'u':
-		        axis = 'y';
-				direction = 'n';
-				layer = 't'
-				break;		
-			case 'u`':
-		        axis = 'y';
-				direction = 'p';
-				layer = 't'
-				break;	
-			case 'i':
-		        axis = 'x';
-				direction = 'p';
-				layer = 'b'
-				break;	
-			case 'i`':
-		        axis = 'x';
-				direction = 'n';
-				layer = 'b'
-				break;	
-			case 'f':
-		        axis = 'z';
-				direction = 'n';
-				layer = 't'
-				break;	
-			case 'f`':
-		        axis = 'z';
-				direction = 'p';
-				layer = 't'
-				break;	
-			case 'r':
-		        axis = 'x';
-				direction = 'n';
-				layer = 't'
-				break;	
-			case 'r`':
-		        axis = 'x';
-				direction = 'p';
-				layer = 't'
-				break;	
-			case 'b':
-		        axis = 'z';
-				direction = 'p';
-				layer = 'b'
-				break;	
-			case 'b`':
-		        axis = 'z';
-				direction = 'n';
-				layer = 'b'
-				break;	
-			case 'd':
-		        axis = 'y';
-				direction = 'p';
-				layer = 'b'
-				break;	
-			case 'd`':
-		        axis = 'y';
-				direction = 'n';
-				layer = 'b'
-				break;	
-
-			//whole rotate
-		    case 'X':
-		        axis = 'x';
-				direction = 'n';
-				break;	
-			case 'X`':
-		        axis = 'x';
-				direction = 'p';
-				break;	
-			case 'Y':
-		        axis = 'y';
-				direction = 'n';
-				break;	
-			case 'Y`':
-		        axis = 'y';
-				direction = 'p';
-				break;	
-			case 'Z':
-		        axis = 'z';
-				direction = 'n';
-				break;
-			case 'Z`':
-		        axis = 'z';
-				direction = 'p';
-				break;
-			default:
-				console.log('Notation() error');
-			};
-
-
-		}
+		var axis, direction, layer, firstParam, secondParam, thirdParam;
+		firstParam = notation.charAt(0);
+		secondParam = notation.charAt(1);
+		thirdParam = notation.charAt(2);
 		
+		if (firstParam == 'U' || firstParam == 'E' || firstParam == 'D') {
+			axis = 'y';
+		}
+		if (firstParam == 'R' || firstParam == 'M' || firstParam == 'L') {
+			axis = 'x';
+		}
+		if (firstParam == 'F' || firstParam == 'S' || firstParam == 'B') {
+			axis = 'z';
+		}
+
+		if (firstParam == 'U' || firstParam == 'R' || firstParam == 'F') {			
+			layer = secondParam - 1;
+			if (thirdParam == '`') {
+				direction = 'p';
+			} else {
+				direction = 'n';
+			}
+		}
+		if (firstParam == 'E' || firstParam == 'M' || firstParam == 'S') {
+			layer = ($scope.cubeDimension - 1) / 2;	
+			if (secondParam == '`') {
+				direction = 'n';
+			} else {
+				direction = 'p';
+			}
+		}
+		if (firstParam == 'D' || firstParam == 'L' || firstParam == 'B') {
+			layer = $scope.cubeDimension - secondParam;	
+			if (thirdParam == '`') {
+				direction = 'n';
+			} else {
+				direction = 'p';
+			}
+		}
+
+		if (firstParam == 'X' || firstParam == 'Y' || firstParam == 'Z') {
+			if (thirdParam == '`') {
+				direction = 'p';
+			} else {
+				direction = 'n';
+			}
+			if (firstParam == 'X') {
+				axis = 'x';
+			} else if (firstParam == 'Y') {
+				axis = 'y';
+			} else {
+				axis = 'z';
+			}
+		}
+
 		if (notation !== notation.toUpperCase()) {
 			$scope.DoulbeRotate(axis, direction, layer);
 		} else if (notation == 'X' || notation == 'X`' || notation == 'Y' || notation == 'Y`' || notation == 'Z' || notation == 'Z`') {
@@ -417,645 +181,219 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 
 	}
 
-
-
-
-
-
 	/* rotate notation: (xyz rotate axis)(p/n rotation direction)(t/m/b layer) */
 	$scope.Rotate = function(axis, rotatedirection, layer) {
 		//indentify the affected faces and data flow
-		
-		if ($scope.cubeDimension  == 2) {	
-			if (axis == 'y' && layer == 't') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 0}, 
-						{face: 5, innerface: 1},
-						{face: 1, innerface: 1},
-						{face: 4, innerface: 0}, 
+		$scope.isProcessing = true;
+		if (axis == 'y') {
+			$scope.sidefaces = [0, 5, 1, 4];
+			affectedFaces =[];	   
 
-					],
+		    //side faces
+			for (var i = 0; i < $scope.cubeDimension; i++) {
+				affectedFaces[i] = [];
+				for (var j = 0; j < $scope.sidefaces.length; j++) {
+					var faceIndex = $scope.sidefaces[j];
+					if (j == 0 || j == $scope.sidefaces.length - 1) {
+						var innerFaceIndex = i + layer * $scope.cubeDimension;
+					} else {
+						var innerFaceIndex = $scope.cubeDimension -1 - i + layer * $scope.cubeDimension;
+					}
+					
+					affectedFaces[i][j] = {face: faceIndex, innerface: innerFaceIndex};
 
-					[
-						{face: 0, innerface: 1}, 
-						{face: 5, innerface: 0}, 
-						{face: 1, innerface: 0}, 
-						{face: 4, innerface: 1}, 
-
-					],
-
-					//top faces
-					[
-						{face: 2, innerface: 0}, 
-						{face: 2, innerface: 1}, 
-						{face: 2, innerface: 3}, 
-						{face: 2, innerface: 2}, 
-
-					],
-
-				];
+				}
 			}
+			//top innerfaces needed to move
+			if (layer == 0 || layer == ($scope.cubeDimension - 1) ) {
+				var topLayerNum = Math.floor($scope.cubeDimension / 2);
+				if (layer == 0) {topFaceIndex = 2;} //top face
+				if (layer == $scope.cubeDimension - 1) {topFaceIndex = 3;} //buttom face
+				totalTopMove = $scope.cubeDimension;
+				for (var i = 0; i < topLayerNum; i++) {
+					for (var j = 0; j < $scope.cubeDimension - 1 - 2 * i; j++) {
+						var index = totalTopMove++;
+						
+						affectedFaces[index] = [];
 
-			if (axis == 'y' && layer == 'b') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 2}, 
-						{face: 5, innerface: 3}, 
-						{face: 1, innerface: 3}, 
-						{face: 4, innerface: 2}, 
+							
+						for (var k = 0; k < $scope.sidefaces.length; k++) {
+							switch (k) {
+						    case 0:
+								var innerFaceIndex = j + $scope.cubeDimension * i + i;
+						        break;
+						    case 1:
+						        var innerFaceIndex = (j + 1) * $scope.cubeDimension - 1 + $scope.cubeDimension * i - i;
+						        break;
+						    case 2:
+						        var innerFaceIndex = $scope.cubeDimension *  $scope.cubeDimension - 1 - j - $scope.cubeDimension * i - i;
+						        break;
+						    case 3:
+						        var innerFaceIndex = $scope.cubeDimension *  $scope.cubeDimension - (j + 1) * $scope.cubeDimension - $scope.cubeDimension * i + i;
+						        break;   
+							}
+							affectedFaces[index][k] = {face: topFaceIndex, innerface:innerFaceIndex};
+						}
+					}
+				}
 
-					],
-
-					[
-						{face: 0, innerface: 3}, 
-						{face: 5, innerface: 2}, 
-						{face: 1, innerface: 2}, 
-						{face: 4, innerface: 3}, 
-
-					],
-
-					//top faces
-					[
-						{face: 3, innerface: 0}, 
-						{face: 3, innerface: 1}, 
-						{face: 3, innerface: 3}, 
-						{face: 3, innerface: 2}, 
-
-					],
-
-				];
-			}
-
-			if (axis == 'x' && layer == 't') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 1}, 
-						{face: 2, innerface: 1}, 
-						{face: 1, innerface: 3}, 
-						{face: 3, innerface: 3}, 
-
-					],
-
-
-					[
-						{face: 0, innerface: 3}, 
-						{face: 2, innerface: 3}, 
-						{face: 1, innerface: 1}, 
-						{face: 3, innerface: 1}, 
-
-					],
-					//top faces
-					[
-						{face: 4, innerface: 0}, 
-						{face: 4, innerface: 1},
-						{face: 4, innerface: 3}, 
-						{face: 4, innerface: 2}, 
-					],
-
-				];
-			}
-
-
-			if (axis == 'x' && layer == 'b') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 0}, 
-						{face: 2, innerface: 0}, 
-						{face: 1, innerface: 2}, 
-						{face: 3, innerface: 2}, 
-
-					],
-
-
-					[
-						{face: 0, innerface: 2}, 
-						{face: 2, innerface: 2}, 
-						{face: 1, innerface: 0}, 
-						{face: 3, innerface: 0}, 
-
-					],
-					//top faces
-					[
-						{face: 5, innerface: 0}, 
-						{face: 5, innerface: 1}, 
-						{face: 5, innerface: 3}, 
-						{face: 5, innerface: 2}, 
-					],
-
-
-				];
-			}
-
-
-
-
-			//z axis rotation
-			if (axis == 'z' && layer == 't') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 2, innerface: 2}, 
-						{face: 4, innerface: 0}, 
-						{face: 3, innerface: 3}, 
-						{face: 5, innerface: 2}, 
-
-					],
-
-
-					[
-						{face: 2, innerface: 3}, 
-						{face: 4, innerface: 2}, 
-						{face: 3, innerface: 2}, 
-						{face: 5, innerface: 0}, 
-
-					],
-					//top faces
-					[
-						{face: 0, innerface: 0}, 
-						{face: 0, innerface: 1}, 
-						{face: 0, innerface: 3}, 
-						{face: 0, innerface: 2}, 
-					],
-
-				];
-
+				//top center face
+				if ($scope.cubeDimension % 2 !== 0) {
+					affectedFaces[totalTopMove] = [];
+					var innerFaceIndex = ($scope.cubeDimension * $scope.cubeDimension - 1)/ 2;
+					affectedFaces[totalTopMove][0] = {face: topFaceIndex, innerface:innerFaceIndex};
+				}
 			}
 			
-
-			if (axis == 'z' && layer == 'b') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 2, innerface: 0}, 
-						{face: 4, innerface: 1}, 
-						{face: 3, innerface: 1}, 
-						{face: 5, innerface: 3}, 
-
-					],
-
-					[
-						{face: 2, innerface: 1}, 
-						{face: 4, innerface: 3}, 
-						{face: 3, innerface: 0}, 
-						{face: 5, innerface: 1}, 
-
-					],
-
-					//top faces
-					[
-						{face: 1, innerface: 0}, 
-						{face: 1, innerface: 1},
-						{face: 1, innerface: 3}, 
-						{face: 1, innerface: 2}, 
-					],
-
-
-				];
-			}
-
-
 		}
 
-		if ($scope.cubeDimension  == 3) {
-			//y axis rotation
-			if (axis == 'y' && layer == 't') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 0}, 
-						{face: 5, innerface: 2}, 
-						{face: 1, innerface: 2}, 
-						{face: 4, innerface: 0}, 
 
-					],
+		if (axis == 'x') {
 
-					[
-						{face: 0, innerface: 1}, 
-						{face: 5, innerface: 1}, 
-						{face: 1, innerface: 1}, 
-						{face: 4, innerface: 1}, 
+			$scope.sidefaces = [0, 2, 1, 3];
+			affectedFaces = [];
+		   
 
-					],
+		    //side faces
+			for (var i = 0; i < $scope.cubeDimension; i++) {
+				affectedFaces[i] = [];
+				for (var j = 0; j < $scope.sidefaces.length; j++) {
+					var faceIndex = $scope.sidefaces[j];
+					if (j == 0 || j == 1) {
+						var innerFaceIndex = $scope.cubeDimension -1 - layer + i * $scope.cubeDimension;
+					} else {
+						var innerFaceIndex = $scope.cubeDimension * $scope.cubeDimension -1  - layer - i * $scope.cubeDimension;
+					}
 
-					[
-						{face: 0, innerface: 2}, 
-						{face: 5, innerface: 0}, 
-						{face: 1, innerface: 0}, 
-						{face: 4, innerface: 2}, 
-
-					],
-					//top faces
-					[
-						{face: 2, innerface: 0}, 
-						{face: 2, innerface: 2}, 
-						{face: 2, innerface: 8}, 
-						{face: 2, innerface: 6}, 
-
-					],
-
-					[
-						{face: 2, innerface: 1}, 
-						{face: 2, innerface: 5}, 
-						{face: 2, innerface: 7}, 
-						{face: 2, innerface: 3}, 
-
-					],
-					//top central inner face
-					[
-						{face: 2, innerface: 4}
-					]
-				];
-			}
-			
-			if (axis == 'y' && layer == 'm') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 3}, 
-						{face: 5, innerface: 5}, 
-						{face: 1, innerface: 5}, 
-						{face: 4, innerface: 3}, 
-
-					],
-
-					[
-						{face: 0, innerface: 4}, 
-						{face: 5, innerface: 4}, 
-						{face: 1, innerface: 4}, 
-						{face: 4, innerface: 4}, 
-
-					],
-
-					[
-						{face: 0, innerface: 5}, 
-						{face: 5, innerface: 3}, 
-						{face: 1, innerface: 3}, 
-						{face: 4, innerface: 5}, 
-
-					],
 					
-				];
+					affectedFaces[i][j] = {face: faceIndex, innerface: innerFaceIndex};
+
+				}
 			}
+			//top innerfaces needed to move
+			if (layer == 0 || layer == ($scope.cubeDimension - 1) ) {
+				var topLayerNum = Math.floor($scope.cubeDimension / 2);
+				if (layer == 0) {topFaceIndex = 4;} //top face
+				if (layer == $scope.cubeDimension - 1) {topFaceIndex = 5;} //buttom face
+				totalTopMove = $scope.cubeDimension;
+				for (var i = 0; i < topLayerNum; i++) {
+					for (var j = 0; j < $scope.cubeDimension - 1 - 2 * i; j++) {
+						var index = totalTopMove++;						
+						affectedFaces[index] = [];
+							
+						for (var k = 0; k < $scope.sidefaces.length; k++) {
+							switch (k) {
+						    case 0:
+								var innerFaceIndex = j + $scope.cubeDimension * i + i;
+						        break;
+						    case 1:
+						        var innerFaceIndex = (j + 1) * $scope.cubeDimension - 1 + $scope.cubeDimension * i - i;
+						        break;
+						    case 2:
+						        var innerFaceIndex = $scope.cubeDimension *  $scope.cubeDimension - 1 - j - $scope.cubeDimension * i - i;
+						        break;
+						    case 3:
+						        var innerFaceIndex = $scope.cubeDimension *  $scope.cubeDimension - (j + 1) * $scope.cubeDimension - $scope.cubeDimension * i + i;
+						        break;   
+							}
+							affectedFaces[index][k] = {face: topFaceIndex, innerface:innerFaceIndex};
+						}
+					}
+				}
 
-			if (axis == 'y' && layer == 'b') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 6}, 
-						{face: 5, innerface: 8}, 
-						{face: 1, innerface: 8}, 
-						{face: 4, innerface: 6}, 
+				//top center face
+				if ($scope.cubeDimension % 2 !== 0) {
+					affectedFaces[totalTopMove] = [];
+					var innerFaceIndex = ($scope.cubeDimension * $scope.cubeDimension - 1)/ 2;
+					affectedFaces[totalTopMove][0] = {face: topFaceIndex, innerface:innerFaceIndex};
+				}
+			}			
+		}
 
-					],
+		if (axis == 'z') {
+			$scope.sidefaces = [2, 4, 3, 5];
+			affectedFaces = [];
 
-					[
-						{face: 0, innerface: 7}, 
-						{face: 5, innerface: 7}, 
-						{face: 1, innerface: 7}, 
-						{face: 4, innerface: 7}, 
-
-					],
-
-					[
-						{face: 0, innerface: 8}, 
-						{face: 5, innerface: 6}, 
-						{face: 1, innerface: 6}, 
-						{face: 4, innerface: 8}, 
-
-					],
-					//top faces
-					[
-						{face: 3, innerface: 0}, 
-						{face: 3, innerface: 2}, 
-						{face: 3, innerface: 8}, 
-						{face: 3, innerface: 6}, 
-
-					],
-
-					[
-						{face: 3, innerface: 1}, 
-						{face: 3, innerface: 5}, 
-						{face: 3, innerface: 7}, 
-						{face: 3, innerface: 3}, 
-
-					],
-					//top central inner face
-					[
-						{face: 3, innerface: 4}
-					]
-					
-				];
-			}
-
-			//x axis rotation
-			if (axis == 'x' && layer == 't') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 2}, 
-						{face: 2, innerface: 2}, 
-						{face: 1, innerface: 8}, 
-						{face: 3, innerface: 8}, 
-
-					],
-
-					[
-						{face: 0, innerface: 5}, 
-						{face: 2, innerface: 5}, 
-						{face: 1, innerface: 5}, 
-						{face: 3, innerface: 5}, 
-
-					],
-
-					[
-						{face: 0, innerface: 8}, 
-						{face: 2, innerface: 8}, 
-						{face: 1, innerface: 2}, 
-						{face: 3, innerface: 2}, 
-
-					],
-					//top faces
-					[
-						{face: 4, innerface: 0}, 
-						{face: 4, innerface: 2}, 
-						{face: 4, innerface: 8}, 
-						{face: 4, innerface: 6}, 
-
-					],
-
-					[
-						{face: 4, innerface: 1}, 
-						{face: 4, innerface: 5}, 
-						{face: 4, innerface: 7}, 
-						{face: 4, innerface: 3}, 
-
-					],
-					//top central inner face
-					[
-						{face: 4, innerface: 4}
-					]
-				];
-			}
-
-			if (axis == 'x' && layer == 'm') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 1}, 
-						{face: 2, innerface: 1}, 
-						{face: 1, innerface: 7}, 
-						{face: 3, innerface: 7}, 
-
-					],
-
-					[
-						{face: 0, innerface: 4}, 
-						{face: 2, innerface: 4}, 
-						{face: 1, innerface: 4}, 
-						{face: 3, innerface: 4}, 
-
-					],
-
-					[
-						{face: 0, innerface: 7}, 
-						{face: 2, innerface: 7}, 
-						{face: 1, innerface: 1}, 
-						{face: 3, innerface: 1}, 
-
-					],
-					
-				];
-			}
-
-			if (axis == 'x' && layer == 'b') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 0, innerface: 0}, 
-						{face: 2, innerface: 0}, 
-						{face: 1, innerface: 6}, 
-						{face: 3, innerface: 6}, 
-
-					],
-
-					[
-						{face: 0, innerface: 3}, 
-						{face: 2, innerface: 3}, 
-						{face: 1, innerface: 3}, 
-						{face: 3, innerface: 3}, 
-
-					],
-
-					[
-						{face: 0, innerface: 6}, 
-						{face: 2, innerface: 6}, 
-						{face: 1, innerface: 0}, 
-						{face: 3, innerface: 0}, 
-
-					],
-					//top faces
-					[
-						{face: 5, innerface: 0}, 
-						{face: 5, innerface: 2}, 
-						{face: 5, innerface: 8}, 
-						{face: 5, innerface: 6}, 
-
-					],
-
-					[
-						{face: 5, innerface: 1}, 
-						{face: 5, innerface: 5}, 
-						{face: 5, innerface: 7}, 
-						{face: 5, innerface: 3}, 
-
-					],
-					//top central inner face
-					[
-						{face: 5, innerface: 4}
-					]
-				];
-			}
-
-			//z axis rotation
-			if (axis == 'z' && layer == 't') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 2, innerface: 6}, 
-						{face: 4, innerface: 0}, 
-						{face: 3, innerface: 8}, 
-						{face: 5, innerface: 6}, 
-
-					],
-
-					[
-						{face: 2, innerface: 7}, 
-						{face: 4, innerface: 3}, 
-						{face: 3, innerface: 7}, 
-						{face: 5, innerface: 3}, 
-
-					],
-
-					[
-						{face: 2, innerface: 8}, 
-						{face: 4, innerface: 6}, 
-						{face: 3, innerface: 6}, 
-						{face: 5, innerface: 0}, 
-
-					],
-					//top faces
-					[
-						{face: 0, innerface: 0}, 
-						{face: 0, innerface: 2}, 
-						{face: 0, innerface: 8}, 
-						{face: 0, innerface: 6}, 
-
-					],
-
-					[
-						{face: 0, innerface: 1}, 
-						{face: 0, innerface: 5}, 
-						{face: 0, innerface: 7}, 
-						{face: 0, innerface: 3}, 
-
-					],
-					//top central inner face
-					[
-						{face: 0, innerface: 4}
-					]
-				];
-
-			}
-
-
-			if (axis == 'z' && layer == 'm') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 2, innerface: 3}, 
-						{face: 4, innerface: 1}, 
-						{face: 3, innerface: 5}, 
-						{face: 5, innerface: 7}, 
-
-					],
-
-					[
-						{face: 2, innerface: 4}, 
-						{face: 4, innerface: 4}, 
-						{face: 3, innerface: 4}, 
-						{face: 5, innerface: 4}, 
-
-					],
-
-					[
-						{face: 2, innerface: 5}, 
-						{face: 4, innerface: 7}, 
-						{face: 3, innerface: 3}, 
-						{face: 5, innerface: 1}, 
-
-					]
+		    //side faces
+			for (var i = 0; i < $scope.cubeDimension; i++) {
+				affectedFaces[i] = [];
+				for (var j = 0; j < $scope.sidefaces.length; j++) {
+					var faceIndex = $scope.sidefaces[j];
+					if (j == 0) {
+						var innerFaceIndex = ($scope.cubeDimension - 1) * $scope.cubeDimension + i - layer * $scope.cubeDimension;
+					} 
+					if (j == 1) {
+						var innerFaceIndex = layer + i * $scope.cubeDimension;
+					} 
+					if (j == 2) {
+						var innerFaceIndex = $scope.cubeDimension * $scope.cubeDimension -1 - i - layer * $scope.cubeDimension;
+					} 
+					if (j == 3) {
+						var innerFaceIndex = ($scope.cubeDimension - 1) * $scope.cubeDimension - i * $scope.cubeDimension + layer;
+					}
 				
-				];
+					affectedFaces[i][j] = {face: faceIndex, innerface: innerFaceIndex};
+				}
 			}
+			//top innerfaces needed to move
+			if (layer == 0 || layer == ($scope.cubeDimension - 1) ) {
+				var topLayerNum = Math.floor($scope.cubeDimension / 2);
+				if (layer == 0) {topFaceIndex = 0;} //top face
+				if (layer == $scope.cubeDimension - 1) {topFaceIndex = 1;} //buttom face
+				totalTopMove = $scope.cubeDimension;
+				for (var i = 0; i < topLayerNum; i++) {
+					for (var j = 0; j < $scope.cubeDimension - 1 - 2 * i; j++) {
+						var index = totalTopMove++;						
+						affectedFaces[index] = [];
+							
+						for (var k = 0; k < $scope.sidefaces.length; k++) {
+							switch (k) {
+						    case 0:
+								var innerFaceIndex = j + $scope.cubeDimension * i + i;
+						        break;
+						    case 1:
+						        var innerFaceIndex = (j + 1) * $scope.cubeDimension - 1 + $scope.cubeDimension * i - i;
+						        break;
+						    case 2:
+						        var innerFaceIndex = $scope.cubeDimension *  $scope.cubeDimension - 1 - j - $scope.cubeDimension * i - i;
+						        break;
+						    case 3:
+						        var innerFaceIndex = $scope.cubeDimension *  $scope.cubeDimension - (j + 1) * $scope.cubeDimension - $scope.cubeDimension * i + i;
+						        break;   
+							}
+							affectedFaces[index][k] = {face: topFaceIndex, innerface:innerFaceIndex};
+						}
+					}
+				}
 
-			if (axis == 'z' && layer == 'b') {
-				affectedFaces = [
-					//side faces
-					[
-						{face: 2, innerface: 0}, 
-						{face: 4, innerface: 2}, 
-						{face: 3, innerface: 2}, 
-						{face: 5, innerface: 8}, 
-
-					],
-
-					[
-						{face: 2, innerface: 1}, 
-						{face: 4, innerface: 5}, 
-						{face: 3, innerface: 1}, 
-						{face: 5, innerface: 5}, 
-
-					],
-
-					[
-						{face: 2, innerface: 2}, 
-						{face: 4, innerface: 8}, 
-						{face: 3, innerface: 0}, 
-						{face: 5, innerface: 2}, 
-
-					],
-					//top faces
-					[
-						{face: 1, innerface: 0}, 
-						{face: 1, innerface: 2}, 
-						{face: 1, innerface: 8}, 
-						{face: 1, innerface: 6}, 
-
-					],
-
-					[
-						{face: 1, innerface: 1}, 
-						{face: 1, innerface: 5}, 
-						{face: 1, innerface: 7}, 
-						{face: 1, innerface: 3}, 
-
-					],
-					//top central inner face
-					[
-						{face: 1, innerface: 4}
-					]
-				];
-			}
+				//top center face
+				if ($scope.cubeDimension % 2 !== 0) {
+					affectedFaces[totalTopMove] = [];
+					var innerFaceIndex = ($scope.cubeDimension * $scope.cubeDimension - 1)/ 2;
+					affectedFaces[totalTopMove][0] = {face: topFaceIndex, innerface:innerFaceIndex};
+				}
+			}			
+		}
+		$scope.RotateSetData(affectedFaces, rotatedirection);
+		if (!$scope.disableAimation) {
+			$scope.RotateMovement(affectedFaces, axis, rotatedirection, layer);
 		}
 		
-
-
-
-
-
-
-		$scope.RotateSetData(affectedFaces, rotatedirection);
-		$scope.RotateMovement(affectedFaces, axis, rotatedirection, layer);
 		
-		
-
 		$timeout(function () {
       		$scope.CompleteMovement();
   		}, $scope.animation_process_time);
 		
-
-	}
-
-
-	$scope.DoulbeRotate = function(axis, rotatedirection, layer){
-		var layer1 ='m';
-		$scope.Rotate(axis, rotatedirection, layer);
-		$scope.Rotate(axis, rotatedirection, layer1);
 	}
 
 	$scope.WholeRotate = function(axis, rotatedirection){
-		if ($scope.cubeDimension  == 2) {
-			var layer = 't', layer1 = 'b';
+		for (var i = 0; i < $scope.cubeDimension; i++) {
+			var layer = i;
 			$scope.Rotate(axis, rotatedirection, layer);
-			$scope.Rotate(axis, rotatedirection, layer1);
 		}
-
-		if ($scope.cubeDimension  == 3) {
-			var layer = 't', layer1 = 'm', layer2 ='b';
-			$scope.Rotate(axis, rotatedirection, layer);
-			$scope.Rotate(axis, rotatedirection, layer1);
-			$scope.Rotate(axis, rotatedirection, layer2);
-		}
-
 	}
 
-	$scope.RotateSetData = function(affectedFaces, rotatedirection) {
-		
+	$scope.RotateSetData = function(affectedFaces, rotatedirection) {		
 		if (rotatedirection == 'p') {
 			$scope.RotateDataPositive(affectedFaces)
 		}
@@ -1064,10 +402,6 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 		}
 		
 	}
-
-
-	
-
 
 	$scope.RotateMovement = function(affectedFaces, axis, rotatedirection, layer) {
 		var spin_faces_side = [], spin_faces_top = [];
@@ -1085,56 +419,24 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 
 			//Set special spin axis for safari
 			for (var j = 0; j < affectedFaces[i].length; j++) {
-				var facenum = affectedFaces[i][j].face, innerfacenum = affectedFaces[i][j].innerface;
+				var faceIndex = affectedFaces[i][j].face, innerFaceIdex = affectedFaces[i][j].innerface;
 				if ($scope.isSafari) {
-					var spinaxis = 'spinaxis_d' + $scope.cubeDimension + '_' + facenum;
-					$scope.facesMaping[facenum][innerfacenum].spinaxis = spinaxis;
+					var spinaxis = 'spinaxis_d' + $scope.cubeDimension + '_' + faceIndex;
+					$scope.facesMaping[faceIndex][innerFaceIdex].spinaxis = spinaxis;
 				}
-				
-
 			}
-
-
-
 		}		
 		
-		if (axis == 'y' && rotatedirection == 'p') {
-			var spin_effect_side = 'spin_effect_yp_s';
-			var spin_effect_top = 'spin_effect_yp_t'
-		}
-		if (axis == 'y' && rotatedirection == 'n') {
-			var spin_effect_side = 'spin_effect_yn_s';
-			var spin_effect_top = 'spin_effect_yn_t'
+		if (axis == 'x' ||axis == 'y') {
+			var spin_effect_side = 'spin_effect_' + axis + rotatedirection +'_s';
+			var spin_effect_top = 'spin_effect_' + axis + rotatedirection +'_t'
 		}
 
-		if (axis == 'x' && rotatedirection == 'p') {
-			var spin_effect_side = 'spin_effect_xp_s';
-			var spin_effect_top = 'spin_effect_xp_t'
+		if (axis == 'z') {
+			var spin_effect_side = 'spin_effect_' + axis + rotatedirection +'_s_0';
+			var spin_effect_side_1 = 'spin_effect_' + axis + rotatedirection +'_s_1';
+			var spin_effect_top = 'spin_effect_' + axis + rotatedirection +'_t'
 		}
-		if (axis == 'x' && rotatedirection == 'n') {
-			var spin_effect_side = 'spin_effect_xn_s';
-			var spin_effect_top = 'spin_effect_xn_t'
-		}
-
-		if (axis == 'z' && rotatedirection == 'p') {
-			var spin_effect_side = 'spin_effect_zp_s_0';
-			var spin_effect_side_1 = 'spin_effect_zp_s_1';
-			var spin_effect_top = 'spin_effect_zp_t'
-		}
-		if (axis == 'z' && rotatedirection == 'n') {
-			var spin_effect_side = 'spin_effect_zn_s_0';
-			var spin_effect_side_1 = 'spin_effect_zn_s_1';
-			var spin_effect_top = 'spin_effect_zn_t'
-		}
-
-
-
-
-
-
-
-
-
 
 		for (var i = 0; i < spin_faces_side.length; i++) {
 			if (axis == 'z') { //special arrangement for z axis rotation since side faces have different rotate axis
@@ -1145,91 +447,76 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 					$scope.facesMaping[x][y].spin = spin_effect_side;
 				}
 				
-
 			} else {
 				var x = spin_faces_side[i].face, y = spin_faces_side[i].innerface;
 				$scope.facesMaping[x][y].spin = spin_effect_side;
 			}
-
 		}
 		
 		for (var i = 0; i < spin_faces_top.length; i++) {
 			var x = spin_faces_top[i].face, y = spin_faces_top[i].innerface;
 			$scope.facesMaping[x][y].spin = spin_effect_top;
-
 		}
-
-
-
-
-
-
-
-
-
 	}
-
 
 
 /*----------------------  public function -------------------------------------*/
 	$scope.RotateDataPositive = function(RotateData) {
-		var facenum, innerfacenum, facenum1, innerfacenum1, store, store1;
+		var faceIndex, innerFaceIndex, faceindex1, innerFaceIndex1, store, store1;
 		for (var i = 0; i < RotateData.length; i++) {
 
 			for (var j = 0; j < RotateData[i].length; j++) {
-				facenum = RotateData[i][j].face;
-				innerfacenum = RotateData[i][j].innerface;
-				
+				faceIndex = RotateData[i][j].face;
+				innerFaceIndex = RotateData[i][j].innerface;				
 				
 				if (j == 0) {
-					store = $scope.facesMaping[facenum][innerfacenum].value;
-					store1 = $scope.facesMaping[facenum][innerfacenum].id;
+					store = $scope.facesMaping[faceIndex][innerFaceIndex].value;
+					store1 = $scope.facesMaping[faceIndex][innerFaceIndex].id;
 
 				} 
 				if (j < RotateData[i].length - 1) {
-					facenum1 = RotateData[i][j + 1].face;
-					innerfacenum1 = RotateData[i][j + 1].innerface;
+					faceIndex1 = RotateData[i][j + 1].face;
+					innerFaceIndex1 = RotateData[i][j + 1].innerface;
 
-					$scope.facesMaping[facenum][innerfacenum].value = $scope.facesMaping[facenum1][innerfacenum1].value;
-					$scope.facesMaping[facenum][innerfacenum].id = $scope.facesMaping[facenum1][innerfacenum1].id;
+					$scope.facesMaping[faceIndex][innerFaceIndex].value = $scope.facesMaping[faceIndex1][innerFaceIndex1].value;
+					$scope.facesMaping[faceIndex][innerFaceIndex].id = $scope.facesMaping[faceIndex1][innerFaceIndex1].id;
 				} else {
-					$scope.facesMaping[facenum][innerfacenum].value = store;
-					$scope.facesMaping[facenum][innerfacenum].id = store1;
+					$scope.facesMaping[faceIndex][innerFaceIndex].value = store;
+					$scope.facesMaping[faceIndex][innerFaceIndex].id = store1;
 				}				
 			}
 		}
 	}
 
 	$scope.RotateDataNegative = function(RotateData) {
-		var facenum, innerfacenum, facenum1, innerfacenum1, store, store1;
+		var faceIndex, innerFaceIndex, faceIndex1, innerFaceIndex1, store, store1;
 		for (var i = 0; i < RotateData.length; i++) {
 
 			for (var j = RotateData[i].length - 1; j >= 0; j--) {
-				facenum = RotateData[i][j].face;
-				innerfacenum = RotateData[i][j].innerface;				
+				faceIndex = RotateData[i][j].face;
+				innerFaceIndex = RotateData[i][j].innerface;				
 				
 				if (j == RotateData[i].length - 1) {
-					store = $scope.facesMaping[facenum][innerfacenum].value;
-					store1 = $scope.facesMaping[facenum][innerfacenum].id;
+					store = $scope.facesMaping[faceIndex][innerFaceIndex].value;
+					store1 = $scope.facesMaping[faceIndex][innerFaceIndex].id;
 				} 
 				if (j > 0) {
-					facenum1 = RotateData[i][j - 1].face;
-					innerfacenum1 = RotateData[i][j - 1].innerface;
+					faceIndex1 = RotateData[i][j - 1].face;
+					innerFaceIndex1 = RotateData[i][j - 1].innerface;
 
-					$scope.facesMaping[facenum][innerfacenum].value = $scope.facesMaping[facenum1][innerfacenum1].value;
-					$scope.facesMaping[facenum][innerfacenum].id = $scope.facesMaping[facenum1][innerfacenum1].id;
+					$scope.facesMaping[faceIndex][innerFaceIndex].value = $scope.facesMaping[faceIndex1][innerFaceIndex1].value;
+					$scope.facesMaping[faceIndex][innerFaceIndex].id = $scope.facesMaping[faceIndex1][innerFaceIndex1].id;
 				} else {
-					$scope.facesMaping[facenum][innerfacenum].value = store;
-					$scope.facesMaping[facenum][innerfacenum].id = store1;
+					$scope.facesMaping[faceIndex][innerFaceIndex].value = store;
+					$scope.facesMaping[faceIndex][innerFaceIndex].id = store1;
 				}				
 			}
 		}
 	}
 
-
 	$scope.CompleteMovement = function() {
 		var complete = true, cubeDimension = $scope.cubeDimension;
-		for (var i = 0; i < 6; i++) {
+		for (var i = 0; i < $scope.faceNum; i++) {
 			for (var j = 0; j < cubeDimension * cubeDimension; j++) {
 				$scope.facesMaping[i][j].spin = '';				
 				if ($scope.isSafari) {
@@ -1240,57 +527,49 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 				//check whether complete
 				if (j != 0) {
 					if ($scope.facesMaping[i][j].value != $scope.facesMaping[i][j - 1].value) {
-						complete = false
-					}
-					
+						complete = false;
+					}					
 				}
 			}
 		}
 		if (complete) {
 			console.log(complete);
 		}
-		
+		$scope.isProcessing = false;
 	}
-
-
-
-
-
 
 	$scope.RandomMovement = function() {
 		//Select random movement
-		if ($scope.cubeDimension  == 2) {
-			var movement = [
-				'U', 'L', 'F', 'R', 'B', 'D',
-				'U`', 'L`', 'F`', 'R`', 'B`', 'D`',
-			]			
-		}
-
-
-		if ($scope.cubeDimension  == 3) {
-			var movement = [
-				'U', 'L', 'F', 'R', 'B', 'D',
-				'U`', 'L`', 'F`', 'R`', 'B`', 'D`',
-				'M', 'M`', 'E', 'E`', 'S', 'S`',
-				'u', 'i', 'f', 'r', 'b', 'd',
-				'u`', 'i`', 'f`', 'r`', 'b`', 'd`'
-			]			
-		} 
-
-		var rand = movement[Math.floor(Math.random() * movement.length)];
-		$scope.Notation(rand);
+		var randomAxis = [
+			'x', 'y', 'z'
+		];
+		var randomDirection = [
+			'p', 'n'
+		];		
+		var axis = randomAxis[Math.floor(Math.random() * randomAxis.length)];
+		var direction = randomDirection[Math.floor(Math.random() * randomDirection.length)];
+		var layer = Math.floor(Math.random() * $scope.cubeDimension);
+		$scope.Rotate(axis, direction, layer);
 	}
 
 	$scope.RandomInitialization = function() {
 		var randommovement = [];
-		var movementstep = 20;
+		var movementstep = 30;
 		for (var i = 0; i < movementstep; i++) {
 			$scope.RandomMovement();
 		}
 
 	}
 
-
+	$scope.transformTo = function(dimension) {
+		if ($scope.cubeDimension !== dimension) {
+			var transform = confirm("Transform to different dimension will reset the cube. Do you want to transform?");
+			if (transform) {
+			    $scope.cubeDimension = dimension;
+				$scope.ResetCube();
+			}			
+		}
+	}
 	//Solution
 	$scope.countStep = 0;
 
@@ -1317,7 +596,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 
 		/*
 		buttomColor = $scope.facesMaping[3][4].id.charAt(0);
-		for (var i = 0; i < 6; i++) {
+		for (var i = 0; i < $scope.faceNum; i++) {
 			for (var j = 0; j < 9; j++) {
 
 				if ($scope.facesMaping[i][j].id.charAt(0) == buttomColor && $scope.facesMaping[i][j].id.charAt(2) == 1) {
@@ -1342,7 +621,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 	$scope.SetInitialPosition = function() {
 		var findFrontFace, findButtomFace;
 		var movement =[];
-		for (var i = 0; i < 6; i++) {
+		for (var i = 0; i < $scope.faceNum; i++) {
 						
 			if ($scope.facesMaping[i][4].id.charAt(0) == 0 ) {
 				findFrontFace = i;
@@ -1501,32 +780,6 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
     	}
 
 	}
-
-
-
-
-	$scope.transformTo2x2 = function() {
-		if ($scope.cubeDimension !== 2) {
-			var transform = confirm("Transform to different dimension will reset the cube. Do you want to transform?");
-			if (transform) {
-			    $scope.cubeDimension = 2;
-				$scope.ResetCube();
-			}			
-		}
-
-	}
-	$scope.transformTo3x3 = function() {
-		if ($scope.cubeDimension !== 3) {
-			var transform = confirm("Transform to different dimension will reset the cube. Do you want to transform?");
-			if (transform) {
-			    $scope.cubeDimension = 3;
-				$scope.ResetCube();
-			}			
-		}
-	}
-
-
-
 
 
 }])

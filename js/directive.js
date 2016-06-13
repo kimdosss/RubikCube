@@ -2,10 +2,11 @@ var appDirtive = angular.module('appDirtive', ['ngTouch']);
 
 appDirtive.directive('cube', ['$document', function($document) {
 	return {
-	    template: '<div>' + 
-	    	'<control-pannel pannel-button-maping = "pannelButtonMaping"></control-pannel>' +
-	    	'<cube-faces ng-repeat="(faceIndex,innerFaceMaping) in facesMaping" faces-position = "faceIndex" is-safari = isSafari face-dimension = "cubeDimension">' + 
-	    		'<div ng-repeat="(innerFaceIndex, innerFaceData) in innerFaceMaping" class = "{{innerFaceData.spinaxis}} {{innerFaceData.spin}}">' + 
+	    template: 
+	    '<div>' + 
+	    	'<control-pannel pannel-button-maping = "cubeButtonMaping"></control-pannel>' +
+	    	'<cube-faces ng-repeat = "(faceIndex,innerFaceMaping) in facesMaping" faces-position = "faceIndex" is-safari = isSafari face-dimension = "cubeDimension">' + 
+	    		'<div cube-inner-container ng-repeat = "(innerFaceIndex, innerFaceData) in innerFaceMaping" face-index = "faceIndex" face-dimension = "cubeDimension" is-safari = "isSafari" spin-effect = "innerFaceData.spin">' + 
 	    			'<cube-inner-faces face-index = "faceIndex" inner-face-index = "innerFaceIndex" inner-face-data = "innerFaceData" face-dimension = "cubeDimension" class = "{{innerFaceData.value}}">' +
 					'</cube-inner-faces>' +
 				'</div>' +
@@ -27,23 +28,41 @@ appDirtive.directive('cube', ['$document', function($document) {
 			var rotateDegX = -25;
 			var rotateDegY = -25;
 			var rotatePreDegX, rotatePreDegY;
+			var cubeAdjustPosition = scope.cubeDimension;
 
+			function SetCubeView (rotateDegX, rotateDegY, scaleView){
+				var transformation = 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(' + scaleView + ',' + scaleView + ',' + scaleView +')';
 
-			cube.css({
-				position: 'relative',
-				width: '200px',
-				height:'200px',				
-				'transform-style':' preserve-3d',
-				'-webkit-transform-style': 'preserve-3d',
-				'-moz-transform-style': 'preserve-3d',
-		    	'-moz-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(0.8,0.8,0.8)',
-                '-webkit-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(0.8,0.8,0.8)',
-			    '-o-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(0.8,0.8,0.8)',
-                transform: 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(0.8,0.8,0.8)'
-			});
+				cube.css({
+					position: 'relative',		
+					'transform-style':' preserve-3d',
+					'-webkit-transform-style': 'preserve-3d',
+					'-moz-transform-style': 'preserve-3d',
 
+			    	'-moz-transform': transformation,
 
+	                '-webkit-transform': transformation,
 
+				    '-o-transform': transformation,
+
+	                transform: transformation,
+
+	                top: (-scope.cubeDimension * 50 + 120) + 'px',
+
+	                left: (-scope.cubeDimension * 50 + 120) + 'px',
+
+					//width: scope.cubeDimension * 100 + 'px',
+					//height: scope.cubeDimension * 100 + 'px',
+	                'transform-origin': scope.cubeDimension * 50 + 'px ' + scope.cubeDimension * 50 + 'px ' + '0',
+					'-webkit-transform-origin': scope.cubeDimension * 50 + 'px ' + scope.cubeDimension * 50 + 'px ' + '0',
+
+				});
+			}
+			
+			scope.$watch('cubeDimension', function(newValue, oldValue) {
+				scaleView = 2.6 / newValue;
+	      		SetCubeView(rotateDegX, rotateDegY, scaleView);
+	      	});
 
 			cube.on('mousedown', function(event) {
 		        // Prevent default dragging of selected content
@@ -54,25 +73,13 @@ appDirtive.directive('cube', ['$document', function($document) {
 		        $document.on('mouseup', mouseup);
 		        rotatePreDegX = rotateDegX;
 		        rotatePreDegY = rotateDegY;	
-
 	      	});
 
 
-
-
 	      	function mousemove(event) {
-
 		        rotateDegX = -(event.pageY - startY) + rotatePreDegX;
 		        rotateDegY =  (event.pageX - startX) + rotatePreDegY;
-		        cube.css({
-		        	'-moz-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(0.8,0.8,0.8)',
-                    '-webkit-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(0.8,0.8,0.8)',
-                    '-o-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(0.8,0.8,0.8)',
-                    '-ms-transform': 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(0.8,0.8,0.8)',
-        		});
-
-
-
+        		SetCubeView(rotateDegX, rotateDegY, scaleView);
 	      	};
 
 	      	function mouseup() {
@@ -81,16 +88,10 @@ appDirtive.directive('cube', ['$document', function($document) {
 	      	};
 
 	      	scope.$watchGroup(['rotateViewX', 'rotateViewY'], function() {
-
-	      		rotateViewDegX = -scope.rotateViewY * 4;
-	      		rotateViewDegY = scope.rotateViewX * 4;
-
-				cube.css({
-		        	'-moz-transform': 'rotatex(' + rotateViewDegX + 'deg) rotatey(' + rotateViewDegY + 'deg) scale3d(0.8,0.8,0.8)',
-                    '-webkit-transform': 'rotatex(' + rotateViewDegX + 'deg) rotatey(' + rotateViewDegY + 'deg) scale3d(0.8,0.8,0.8)',
-                    '-o-transform': 'rotatex(' + rotateViewDegX + 'deg) rotatey(' + rotateViewDegY + 'deg) scale3d(0.8,0.8,0.8)',
-                    '-ms-transform': 'rotatex(' + rotateViewDegX + 'deg) rotatey(' + rotateViewDegY + 'deg) scale3d(0.8,0.8,0.8)',
-        		});
+	      		var rotateSensitiveLvl = 4;
+	      		rotateViewDegX = -scope.rotateViewY * rotateSensitiveLvl;
+	      		rotateViewDegY = scope.rotateViewX * rotateSensitiveLvl;
+        		SetCubeView(rotateViewDegX, rotateViewDegY, scaleView);
 	      	});
 		        	
 
@@ -112,56 +113,31 @@ appDirtive.directive('cubeFaces', function() {
 
 
 			if (!scope.isSafari) {
+				//offset faces to form 3d cube
+				offsetDistance = scope.faceDimension * 50;
 
-				if (scope.faceDimension == 2) {
-				    switch (scope.facesPosition) {
-					    case 0:
-					        posotion = 'translateZ(100px)';
-					        break;
-					    case 1:
-					        posotion = 'translateZ(-100px)';
-					        break;
-					    case 2:
-					        posotion = 'rotateX(90deg) translateZ(100px)';
-					        break;
-					    case 3:
-					        posotion = 'rotateX(90deg) translateZ(-100px)';
-					        break;
-					    case 4:
-					        posotion = 'rotateY(90deg) translateZ(100px)';
-					        break;
-					    case 5:
-					        posotion = 'rotateY(90deg) translateZ(-100px)';
-					        break;			        
-					    default:
-					    	console.log('directive cubeface positoin error');
-					};
-				}
-
-				if (scope.faceDimension == 3) {
-				    switch (scope.facesPosition) {
-					    case 0:
-					        posotion = 'translateZ(150px)';
-					        break;
-					    case 1:
-					        posotion = 'translateZ(-150px)';
-					        break;
-					    case 2:
-					        posotion = 'rotateX(90deg) translateZ(150px)';
-					        break;
-					    case 3:
-					        posotion = 'rotateX(90deg) translateZ(-150px)';
-					        break;
-					    case 4:
-					        posotion = 'rotateY(90deg) translateZ(150px)';
-					        break;
-					    case 5:
-					        posotion = 'rotateY(90deg) translateZ(-150px)';
-					        break;			        
-					    default:
-					    	console.log('directive cubeface positoin error');
-					};
-				}
+			    switch (scope.facesPosition) {
+				    case 0:
+				        posotion = 'translateZ(' + offsetDistance + 'px)';
+				        break;
+				    case 1:
+				        posotion = 'translateZ(-' + offsetDistance + 'px)';
+				        break;
+				    case 2:
+				        posotion = 'rotateX(90deg) translateZ(' + offsetDistance + 'px)';
+				        break;
+				    case 3:
+				        posotion = 'rotateX(90deg) translateZ(-' + offsetDistance + 'px)';
+				        break;
+				    case 4:
+				        posotion = 'rotateY(90deg) translateZ(' + offsetDistance + 'px)';
+				        break;
+				    case 5:
+				        posotion = 'rotateY(90deg) translateZ(-' + offsetDistance + 'px)';
+				        break;			        
+				    default:
+				    	console.log('directive cubeface positoin error');
+				};
 
 			} else {
 				//Special faces postion for safari
@@ -189,7 +165,6 @@ appDirtive.directive('cubeFaces', function() {
 				};
 
 			}
-
 			
 	    	element.css({
 	    		width:  scope.faceDimension * 100 + 'px',
@@ -200,15 +175,75 @@ appDirtive.directive('cubeFaces', function() {
                 transform: posotion,			
 
 	    	}); 
+		}
+	}
+})
 
+appDirtive.directive('cubeInnerContainer', function() {
+	return {
+	    restrict: 'A',
+	    scope: {
+	    	faceIndex : '=',
+	    	faceDimension: '=',
+	    	spinEffect: '=',
+	    	isSafari: '='
+	    },
+	    link: function(scope, element, attributes) {
+	    	scope.$watch('spinEffect', function() {
+	    		var adjustAxis = 50 * scope.faceDimension;
+    			if (scope.faceIndex % 2 == 0) {
+	    			var sign = -1;
+	    		} else {
+	    			var sign = 1;
+	    		}
+	    		if (scope.isSafari) {
 
+	    			if (scope.spinEffect == '') {
+	    				element.css({
+			    			'-moz-transform': 'translateZ(' + -sign * adjustAxis + 'px)',
+						    '-webkit-transform': 'translateZ(' + -sign * adjustAxis + 'px)',
+						    '-o-transform': 'translateZ(' + -sign * adjustAxis + 'px)',
+						    transform: 'translateZ(' + -sign * adjustAxis + 'px)',
+		    				'transform-origin': '50% 50% 0',
+							'-webkit-transform-origin': '50% 50% 0'
+				    	});	  
+
+	    			} else {
+						element.css({
+
+			    			'-moz-transform': 'translateZ(0px)',
+						    '-webkit-transform': 'translateZ(0px)',
+						    '-o-transform': 'translateZ(0px)',
+						    transform: 'translateZ(0px)',
+							'transform-origin': adjustAxis + 'px ' + adjustAxis + 'px ' + sign *adjustAxis + 'px ',
+							'-webkit-transform-origin': adjustAxis + 'px ' + adjustAxis + 'px ' + sign *adjustAxis + 'px '
+				    	});	    				
+	    			}
+
+	    		} else {	
+					element.css({
+						'transform-origin': adjustAxis + 'px ' + adjustAxis + 'px ' + sign *adjustAxis + 'px ',
+						'-webkit-transform-origin': adjustAxis + 'px ' + adjustAxis + 'px ' + sign *adjustAxis + 'px '
+			    	});
+	    		}
+
+	    		if (scope.spinEffect == "") {
+	    			element.removeClass('spin_effect_yp_s spin_effect_yp_t spin_effect_yn_s spin_effect_yn_t spin_effect_xp_s spin_effect_xp_t spin_effect_xn_s spin_effect_xn_t spin_effect_zp_s_0 spin_effect_zp_s_1 spin_effect_zp_t spin_effect_zn_s_0 spin_effect_zn_s_1 spin_effect_zn_t');
+	    		} else {
+	    			element.addClass(scope.spinEffect);
+	    		}
+	    		
+
+	    		
+	    	});
+	    	
 		}
 	}
 })
 
 appDirtive.directive('cubeInnerFaces', function() {
 	return {
-		template: '<div></div>',//{{faceIndex}}-{{innerFaceIndex}}-{{innerFaceData.value}}-id:{{innerFaceData.id}}
+		template: '<div>{{faceIndex}}-{{innerFaceIndex}}</div>',//{{faceIndex}}-{{innerFaceIndex}}-{{innerFaceData.value}}-id:{{innerFaceData.id}}
 	    restrict: 'E',
 	    scope: {
 	    	faceDimension : '=',
@@ -217,87 +252,24 @@ appDirtive.directive('cubeInnerFaces', function() {
 	        innerFaceData: '='
 	    },	    
 	    link: function(scope, element, attributes) {
-			if (scope.faceDimension == 2) {
-				switch (scope.innerFaceIndex) {
-					case 0:
-				    	offtop = '0';
-				    	offleft = '0';
-				        break;
-				    case 1:
-				    	offtop = '0';
-				    	offleft = '100px';
-				        break;
-				    case 2:
-				    	offtop = '100px';
-				    	offleft = '0';
-				        break;
-				    case 3:
-				    	offtop = '100px';
-				    	offleft = '100px';
-				        break;        			      	        
-				    default:
-				    	console.log('cubeInnerFaces directive error')
-			    }
-			}
 
-
-	    	if (scope.faceDimension == 3) {
-				switch (scope.innerFaceIndex) {
-					case 0:
-				    	offtop = '0';
-				    	offleft = '0';
-				        break;
-				    case 1:
-				    	offtop = '0';
-				    	offleft = '100px';
-				        break;
-				    case 2:
-				    	offtop = '0';
-				    	offleft = '200px';
-				        break;
-				    case 3:
-				    	offtop = '100px';
-				    	offleft = '0';
-				        break;
-				    case 4:
-				    	offtop = '100px';
-				    	offleft = '100px';
-				        break;
-				    case 5:
-				    	offtop = '100px';
-				    	offleft = '200px';
-				        break;
-				    case 6:
-				    	offtop = '200px';
-				    	offleft = '0';
-				        break;
-				    case 7:
-				    	offtop = '200px';
-				    	offleft = '100px';
-				        break;	
-				    case 8:
-				    	offtop = '200px';
-				    	offleft = '200px';
-				        break;				        			      	        
-				    default:
-				    	console.log('cubeInnerFaces directive error')
-				}
-
-	    	}
-			
-
-
+	    	var borderWidth = 3, width = 100, height = 100;
+	    	//calculate inner face position	    	
+	    	var row = Math.floor(scope.innerFaceIndex / scope.faceDimension);
+	    	var column = scope.innerFaceIndex % scope.faceDimension;
+	    	var offtop = 100 * row;
+	    	var offleft = 100 * column;
 
 			var innerface = element.children();
-			var borderWidth = 3, width = 100, height = 100;
+			
 
 	    	element.css({
 				position: 'absolute',
 				width: width + 'px',
 				height: height + 'px',
 				background: '#000',
-				left: offleft,
-				top: offtop,
+				left: offleft + 'px',
+				top: offtop + 'px',
 
 	    	});  	
 
@@ -316,7 +288,10 @@ appDirtive.directive('cubeInnerFaces', function() {
 
 appDirtive.directive('controlPannel', function() {
 	return {
-		template: '<control-pannel-button-group ng-repeat="buttongroup in pannelButtonMaping" button-position = "buttongroup[0].buttonPosition" button-number = "buttongroup[0].cubeDimension"><control-pannel-button ng-repeat="values in buttongroup" button-function = "Rotate(values.value.axis, values.value.direction, values.value.layer)"></control-pannel-button></control-pannel-button-group>',
+		template: 
+			'<control-pannel-button-group ng-repeat="buttongroup in cubeButtonMaping" button-position = "buttongroup[0].buttonPosition" button-number = "buttongroup[0].cubeDimension" face-dimension = "cubeDimension">' + 
+				'<control-pannel-button ng-repeat="values in buttongroup" button-function = "Rotate(values.value.axis, values.value.direction, values.value.layer)"></control-pannel-button>' + 
+			'</control-pannel-button-group>',
 	    restrict: 'E'
 	}
 })
@@ -326,71 +301,33 @@ appDirtive.directive('controlPannelButtonGroup', function() {
 	    restrict: 'E',  
 	    scope: {
 	    	buttonPosition : '=',
-	    	buttonNumber: '='
+	    	buttonNumber: '=',
+	    	faceDimension: '='
 	    },	
 	    link: function(scope, element, attributes) {
-
-			element.css({
-
-				'z-index': 20
-			})
-
-
-	    	if (scope.buttonNumber == 2) {
-				switch (scope.buttonPosition) {
-					case 0:
-						position = 'translateX(-100px) translateY(-105px) translateZ(100px)'
-				        break;
-				    case 1:
-						position = 'rotateZ(180deg) rotateX(180deg) translateX(-150px) translateY(-105px) translateZ(-100px)'
-				        break;
-				    case 2:
-				    	position = 'rotateZ(90deg) translateX(-180px) translateY(-75px) translateZ(100px)'
-				        break;
-				    case 3:
-				    	position = 'rotateZ(270deg) rotateX(180deg) translateX(-70px) translateY(-75px) translateZ(-100px)'
-				        break;
-				    case 4:
-				    	position = 'rotateX(90deg) rotateZ(180deg) translateX(-150px) translateY(-50px) translateZ(155px)'
-				        break;
-				    case 5:
-				    	position = 'rotateX(270deg) translateX(-100px) translateY(-50px) translateZ(-155px)'
-				        break;			    		        			      	        
-				    default:
-				    	console.log('controlPannelButtonGroup directive error')
-				}
-
-	    	}
-
-
-
-	    	if (scope.buttonNumber == 3) {
-				switch (scope.buttonPosition) {
-					case 0:
-						position = 'translateX(-100px) translateY(-115px) translateZ(150px)'
-				        break;
-				    case 1:
-						position = 'rotateZ(180deg) rotateX(180deg) translateX(-250px) translateY(-115px) translateZ(-150px)'
-				        break;
-				    case 2:
-				    	position = 'rotateZ(90deg) translateX(-235px) translateY(-125px) translateZ(150px)'
-				        break;
-				    case 3:
-				    	position = 'rotateZ(270deg) rotateX(180deg) translateX(-120px) translateY(-125px) translateZ(-150px)'
-				        break;
-				    case 4:
-				    	position = 'rotateX(90deg) rotateZ(180deg) translateX(-250px) translateY(-50px) translateZ(200px)'
-				        break;
-				    case 5:
-				    	position = 'rotateX(270deg) translateX(-100px) translateY(-50px) translateZ(-205px)'
-				        break;			    		        			      	        
-				    default:
-				    	console.log('controlPannelButtonGroup directive error')
-				}
-
-	    	}
-
-
+	    	var buttonAdjustPosition = scope.faceDimension * 100, test = 0;
+	    	switch (scope.buttonPosition) {
+				case 0:
+					position = 'translateX(-' + 105 + 'px) translateY(-100px) translateZ(' + buttonAdjustPosition / 2 + 'px)'
+			        break;
+			    case 1:
+					position = 'rotateZ(180deg) rotateX(180deg) translateX(-' + (buttonAdjustPosition - 45) + 'px) translateY(-100px) translateZ(-' + buttonAdjustPosition / 2 +'px)'
+			        break;
+			    case 2:
+			    	position = 'rotateZ(90deg) translateX(-' + (buttonAdjustPosition / 2  + 80) +'px) translateY(-' + (buttonAdjustPosition / 2 - 25) +'px) translateZ(' + buttonAdjustPosition / 2 +'px)'
+			        break;
+			    case 3:
+			    	position = 'rotateZ(270deg) rotateX(180deg) translateX(-' + (buttonAdjustPosition / 2 - 20) +'px) translateY(-' + (buttonAdjustPosition / 2 - 20) +'px) translateZ(-' + buttonAdjustPosition / 2 +'px)'
+			        break;
+			    case 4:
+			    	position = 'rotateX(90deg) rotateZ(180deg) translateX(-' + (buttonAdjustPosition - 45) +'px) translateY(-50px) translateZ(' + (buttonAdjustPosition / 2 + 50) +'px)'
+			        break;
+			    case 5:
+			    	position = 'rotateX(270deg) translateX(-105px) translateY(-50px) translateZ(-' + (buttonAdjustPosition / 2 + 50) + 'px)'
+			        break;			    		        			      	        
+			    default:
+			    	console.log('controlPannelButtonGroup directive error')
+			}
 
 			element.css({
 				position: 'absolute',
@@ -419,7 +356,6 @@ appDirtive.directive('controlPannelButton', function() {
 	    	//element.on('touchstart', scope.buttonFunction);
 
 			element.css({
-
 				'z-index': 20
 			})
 
@@ -456,8 +392,8 @@ appDirtive.directive('rotateViewPannel', function() {
 				background: '#999',
 				'border-radius': '20%',
 				border: '1px #555 solid',
-				left:'400px',
-				top: '90px',
+				left:'360px',
+				top: '25px',
 				'z-index':50,
 			})
 
@@ -514,7 +450,7 @@ appDirtive.directive('rotateViewPannel', function() {
  		        y = (coordsY - startY);
 		        x = (coordsX - startX);
 
-
+		        //Restrict pad moving
 		        if (x < 0) {
 		        	x = 0;
 		        }
@@ -548,9 +484,6 @@ appDirtive.directive('rotateViewPannel', function() {
 	}
 })
 
-
-
-
 appDirtive.directive('timer', function($interval) {
 	return {
 		template: '<button type="button" class="btn btn-default" ng-click = "StartTimer()" ng-disabled="start">start</button><button type="button" class="btn btn-default" ng-click = "EndTimer()" ng-disabled="!start">stop</button></br><span>Timer: {{time | number: 2}} s</span>',
@@ -564,8 +497,8 @@ appDirtive.directive('timer', function($interval) {
 				position: 'absolute',
 				display:'block',
 				width: '200px',
-				left:'440px',
-				top: '300px',
+				left:'405px',
+				top: '230px',
 				'z-index':50,
 			})
 

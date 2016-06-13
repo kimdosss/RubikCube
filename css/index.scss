@@ -42,7 +42,7 @@
 }
 
 
-$animation_time: 0.15s;
+$animation_time: 0.1s;
 
 
 body {
@@ -52,6 +52,12 @@ body {
 	height: 100%;
 }
 
+.main_area{
+	position: absolute;
+
+	margin-left:20px;
+
+}
 
 $topbarHeight: 60px;
 .top-bar{
@@ -75,46 +81,11 @@ $topbarHeight: 60px;
 	}
 }
 
-.button_pannel {
-	position: absolute;
-	margin: 20px;
-	top: $topbarHeight;
-	.button_pannel-title{
-		font-size: 15px;
-		font-weight: 600;
-	}
-	button {
-		margin-top: 5px;
-		font-weight: 600;
-	}
-	.button_pannel_area{
-		height: 70px;
-		visibility: visible;
-		opacity: 1;
-		transition: 1s;
-	}
-	.button_pannel_area_disappear{
-		height: 0;
-		opacity: 0;
-		visibility: hidden;
-		transition: 1s;
-	}
-}
-
-
-
-
-
-
-
-
 
 /* right hand system */
 /* keyframes:; spin_(xyz rotate axis)(positive negative direction)(spin parts side/top) */
 
 /* y axis */
-
-
 
 
 @include keyframes_test(spin_yn_s, rotateY(90deg), rotateY(0deg));
@@ -321,33 +292,6 @@ $topbarHeight: 60px;
 	@include transformation(translateZ(-150px));
 }
 
-/*
-.spinaxis_0_safari_affected{	
-	@include transform_origin(150px 150px -150px);
-}
-
-.spinaxis_1_safari_affected{
-	@include transform_origin(150px 150px 150px);
-}
-
-.spinaxis_2_safari_affected{
-	@include transform_origin(150px 150px -150px); 
-}
-
-.spinaxis_3_safari_affected{
-	@include transform_origin(150px 150px 150px);
-}
-
-.spinaxis_4_safari_affected{
-	@include transform_origin(150px 150px -150px);
-}
-
-.spinaxis_5_safari_affected{
-	@include transform_origin(150px 150px  150px);
-}
-*/
-
-
 
 
 
@@ -357,8 +301,8 @@ cube{
 	perspective: 800px;
     -webkit-perspective: 800px;
     -moz-perspective: 800px;
-	margin-left: 200px;
-	margin-top: 160px;
+	margin-left: 100px;
+	margin-top: 150px;
 }
 
 
@@ -369,11 +313,6 @@ cube-faces{
     -moz-transform-style: preserve-3d;
     z-index: 0;
 }
-
-
-
-
-
 
 
 .face0 div{
@@ -400,8 +339,6 @@ cube-faces{
 .face5 div{
 	background: $color-6
 }
-
-
 
 .arrowx{
 	display: none;
@@ -487,8 +424,8 @@ control-pannel-button{
 	display: block;
 	width: 50px;
 	height: 50px;
-	margin-top: 55px;
-	font-size: 60px;
+	margin-top: 50px;
+	font-size: 70px;
 	transition: 0.5s ease-in-out;
 	-webkit-transition: 0.5s ease-in-out;
 	-moz-transition: 0.5s ease-in-out;
@@ -501,18 +438,40 @@ control-pannel-button{
 }
 
 
-
-
-.button_pannel{
+.button_pannel {
 	position: absolute;
-    margin-left: 175px;
-    margin-top: 550px;
+	margin-top: 10px;
+	margin-left: 680px;
+	top: $topbarHeight;
+	.button_pannel-title{
+		font-size: 15px;
+		font-weight: 600;
+	}
+	button {
+		font-size: 12px;
+		margin-top: 5px;
+		font-weight: 600;
+	}
+	.button_pannel_area{		
+		visibility: visible;
+		opacity: 1;
+		transition: 1s;
+	}
+	.button_pannel_area_disappear{
+		height: 0;
+		opacity: 0;
+		visibility: hidden;
+		transition: 1s;
+	}
     .button_pannel_show{
-    	margin-left: 50px;
+    	margin-left: 10px;
     }
     #button_pannel_container{
-    	width: 580px;
+    	width: 300px;
     }
 }
+
+
+
 
 

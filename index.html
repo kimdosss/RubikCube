@@ -34,137 +34,116 @@
 			<p class="font-title-sm"></p>
 		</div>
 		<div class="top-bar-list-item-right">
+			<button  class="font-title-sm btn btn-primary button_pannel_show" type="button" data-toggle="collapse" data-target="#button_pannel_container">Show/Hide buttons</button>
 			<button  class="font-title-sm btn btn-primary" type="button" data-toggle="modal" data-target="#About">About</button>			
 		</div>
 	</div>
 
 </div>
 
+<div class = "main_area">
+	<div id="About" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
 
-<div id="About" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Notice</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>1.Use rotation buttons on the left or click the arrows on the cube to rotate</p>
+	        <p>2.Drag to rotate the whole cube</p>
+	        <p>3.This application is still under development.</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Notice</h4>
-      </div>
-      <div class="modal-body">
-        <p>1.Use rotation buttons on the left or click the arrows on the cube to rotate</p>
-        <p>2.Drag to rotate the whole cube</p>
-        <p>3.This application is still under development.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<cube></cube>
-
-<div class = "button_pannel">
-	<button  class="font-title-sm btn btn-primary button_pannel_show" type="button" data-toggle="collapse" data-target="#button_pannel_container">Show/Hide buttons</button>
-	<div id = "button_pannel_container" class="collapse in">
-
-		<div class = "row">	
-			<div class="button_pannel_area col-md-6">		
-			
-				<div class = "button_pannel-title">Clocwise face rotations</div>
-				<button type="button" class="btn btn-default" ng-click="Notation('U')">U</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('L')">L</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('F')">F</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('R')">R</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('B')">B</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('D')">D</button>
-
-			</div>
-
-			<div class="button_pannel_area col-md-6">
-				<div class = "button_pannel-title">Counterclocwise face rotations</div>
-				<button type="button" class="btn btn-default" ng-click="Notation('U`')">U`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('L`')">L`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('F`')">F`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('R`')">R`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('B`')">B`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('D`')">D`</button>
-			</div>
-		</div>
-
-
-
-		<div class = "row">	
-			<div class="button_pannel_area col-md-6" ng-class="{button_pannel_area_disappear: cubeDimension == 2}">
-				<div class = "button_pannel-title">Slice turns</div>
-				<button type="button" class="btn btn-default" ng-click="Notation('M')">M</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('M`')">M`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('E')">E</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('E`')">E`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('S')">S</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('S`')">S`</button>
-			</div>
-
-			<div class="button_pannel_area col-md-6" ng-class="{button_pannel_area_disappear: cubeDimension == 2}">		
-				<div class = "button_pannel-title">Double layer turns</div>
-				<button type="button" class="btn btn-default" ng-click="Notation('u')">u</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('u`')">u`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('i')">i</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('i`')">i`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('f')">f</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('f`')">f`</button>
-			</div>
-		</div>
-
-		<div class = "row">	
-			<div class="button_pannel_area col-md-6" ng-class="{button_pannel_area_disappear: cubeDimension == 2}">		
-				<div class = "button_pannel-title">Inverse double layer turns</div>
-				<button type="button" class="btn btn-default" ng-click="Notation('r')">r</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('r`')">r`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('b')">b</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('b`')">b`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('d')">d</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('d`')">d`</button>
-			</div>
-
-			<div class="button_pannel_area col-md-6">		
-				<div class = "button_pannel-title">Whole cube rotations</div>
-				<button type="button" class="btn btn-default" ng-click="Notation('X')">X</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('X`')">X`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('Y')">Y</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('Y`')">Y`</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('Z')">Z</button>
-				<button type="button" class="btn btn-default" ng-click="Notation('Z`')">Z`</button>
-			</div>
-		</div>
-
-		<div class = "row">	
-			<div class="button_pannel_area col-md-6">		
-				<div class = "button_pannel-title">Random rotations</div>
-				<button type="button" class="btn btn-default" ng-click="RandomMovement()">Random Move</button>
-				<button type="button" class="btn btn-default" ng-click="RandomInitialization()">Randomize</button>
-			</div>
-
-
-			<div class="button_pannel_area col-md-6">		
-				<div class = "button_pannel-title">Transform to</div>
-				<button type="button" class="btn btn-default" ng-click="transformTo2x2()">2x2</button>
-				<button type="button" class="btn btn-default" ng-click="transformTo3x3()">3x3</button>
-			</div>
-		</div>
+	  </div>
 	</div>
 
+	<cube></cube>
+
+	<div class = "button_pannel">
+
+		<div class="checkbox">
+			<label><input type="checkbox" ng-model = "disableAimation" ><span class = "button_pannel-title">Disable rotate animation</span></label>
+		</div>
+
+		<div id = "button_pannel_container" class="collapse in">
+
+
+			<div class="button_pannel_area">
+				<div class = "button_pannel-title">Clocwise face rotations</div>
+				<div ng-repeat="buttonsValue in pannelButtonMaping0">
+					<span ng-repeat="button in buttonsValue">
+						<button type="button" class="btn btn-default" ng-disabled= "isProcessing" ng-click="Notation(button.value)">{{button.value}}</button>
+					</span>
+				</div>	
+			</div>
+
+			<div class="button_pannel_area">
+				<div class = "button_pannel-title">Counterclocwise face rotations</div>
+				<div ng-repeat="buttonsValue in pannelButtonMaping1">
+					<span ng-repeat="button in buttonsValue">
+						<button type="button" class="btn btn-default" ng-disabled= "isProcessing" ng-click="Notation(button.value)">{{button.value}}</button>
+					</span>
+				</div>	
+			</div>	
+
+			<div class="button_pannel_area" ng-class="{button_pannel_area_disappear: cubeDimension % 2 == 0}">
+				<div class = "button_pannel-title">Slice turns</div>
+				<div ng-repeat="buttonsValue in pannelButtonMaping2">
+					<span ng-repeat="button in buttonsValue">
+						<button type="button" class="btn btn-default" ng-disabled= "isProcessing" ng-click="Notation(button.value)">{{button.value}}</button>
+					</span>
+				</div>	
+			</div>		
+
+			<div class="button_pannel_area">
+				<div class = "button_pannel-title">Whole cube rotations</div>
+				<div ng-repeat="buttonsValue in pannelButtonMaping3">
+					<span ng-repeat="button in buttonsValue">
+						<button type="button" class="btn btn-default" ng-disabled= "isProcessing" ng-click="Notation(button.value)">{{button.value}}</button>
+					</span>
+				</div>	
+			</div>	
+
+			<div class="button_pannel_area">		
+				<div class = "button_pannel-title">Random rotations</div>
+				<button type="button" class="btn btn-default" ng-click="RandomMovement()" ng-disabled= "isProcessing">Random Move</button>
+				<button type="button" class="btn btn-default" ng-click="RandomInitialization()" ng-disabled= "isProcessing">Randomize</button>
+			</div>
+
+			<div class="button_pannel_area">		
+				<div class = "button_pannel-title">Transform to</div>
+				<button type="button" class="btn btn-default" ng-click="transformTo(2)">2x2</button>
+				<button type="button" class="btn btn-default" ng-click="transformTo(3)">3x3</button>
+				<button type="button" class="btn btn-default" ng-click="transformTo(4)">4x4</button>
+						
+				</br>
+				<button type="button" class="btn btn-default" ng-click="transformTo(5)">5x5</button>	
+				<button type="button" class="btn btn-default" ng-click="transformTo(6)">6x6</button>
+				<button type="button" class="btn btn-default" ng-click="transformTo(7)">7x7</button>
+
+			</div>
+
+		</div>
 
 
 
+
+	</div>
+	<!--
+	<div ng-repeat="(x,y) in facesMaping">
+		<div ng-repeat="(i,j) in y">
+		{{x}}--{{i}}--{{j}}
+		</div>n
+	</div>-->
 </div>
-<!--
-<div ng-repeat="(x,y) in facesMaping">
-	<div ng-repeat="(i,j) in y">
-	{{x}}--{{i}}--{{j}}
-	</div>n
-</div>-->
+
 	
 
 
