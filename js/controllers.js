@@ -563,11 +563,11 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 
 	$scope.transformTo = function(dimension) {
 		if ($scope.cubeDimension !== dimension) {
-			var transform = confirm("Transform to different dimension will reset the cube. Do you want to transform?");
-			if (transform) {
+			//var transform = confirm("Transform to different dimension will reset the cube. Do you want to transform?");
+			//if (transform) {
 			    $scope.cubeDimension = dimension;
 				$scope.ResetCube();
-			}			
+			//}			
 		}
 	}
 	//Solution
