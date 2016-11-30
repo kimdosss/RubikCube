@@ -1,0 +1,142 @@
+<div class = "main_area" ng-controller="viewCon" view-adjust>
+
+	<div class="modal fade" id="instruction" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Solution Mode</h4>
+				</div>
+					<div class="modal-body">
+						<p>In the solution panel, player can submit multiple cube notations.</p>
+						<p>It is for the advanced players who are able to figure out the solution by the first look of the cube, instead of solving it step by step.</p>
+						<p>Solution can be inputted by pressing notation buttons below when the solution panel is activated (showed).</p>
+					</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+
+	<div class="return_btn">
+		<span class="glyphicon glyphicon-menu-left" ng-click="returnToMain()"></span>
+	</div>
+	<cube></cube>
+
+	<nav class="side-bar" ng-class="{'side-bar-right':hideBar}">
+		
+		<button class="font-title-sm btn btn-primary button_pannel_show" type="button" ng-click="hideBar = !hideBar">Show/Hide buttons</button>
+		
+		<div class = "button_pannel">
+			
+<!--
+			<div class="checkbox">
+				<label><input type="checkbox" ng-model = "disableAimation" ><span class = "button_pannel-title">Disable rotate animation</span></label>
+			</div>-->
+
+
+
+
+			<div class="button_pannel-solution" ng-class="{'button_pannel-solution-show':inputSolution}">
+
+				<div class="button_pannel-solution-display button_pannel_broder-1"  scrollto = "{{scrollSolutionItemIndex}}">
+					<div class="button_pannel-solution-display-index-title">Step</div>
+					<div class="button_pannel-solution-display-content-title">Notation</div>
+					<div class="button_pannel-solution-display-row" ng-repeat="(index,item) in storeSolution track by $index" ng-class="{'button_pannel-solution-display-selected':index == selectedItem}"  ng-click="selectSolutionItem(index)">
+
+						<div class="button_pannel-solution-display-index" ng-click="testtest(index)" id="solutionItem-{{index}}">{{index + 1}}</div>
+						<div class="font-title-sm button_pannel-solution-display-content">{{item}}</div>
+						
+					</div>
+					
+				</div>
+
+				<div class="button_pannel-solution-btn-wrapper btn-group">
+
+					<button type="button" class="btn btn-default button_pannel-solution-btn" ng-click="deleteSolutionItem()">Delete</button><!--button_pannel-solution-btn-->
+
+					<button type="button" class="btn btn-default button_pannel-solution-btn" ng-click="submitSolution()">Submit</button>
+
+					<button type="button" class="btn btn-default button_pannel-solution-btn" ng-click="clearSolutionItem()">Clear</button>
+
+					<button type="button" class="btn btn-default button_pannel-solution-btn-question"><span class="glyphicon glyphicon-question-sign" data-toggle="modal" data-target="#instruction"></span></button>
+
+				</div>
+
+				<div class="button_pannel-solution-showBtn" ng-click="inputSolution = !inputSolution"><span class="glyphicon glyphicon-menu-down"></span></div>	
+			</div>
+
+
+
+			<div id = "button_pannel_container">
+				<div class="button_pannel_area button_pannel_broder-1">
+					<div class = "button_pannel-title">Zoom</div>
+					<input class="view-scaler" type="range" value="{viewScale}" min="50" max="200" step="5" ng-model="viewScale">
+					<div class = "button_pannel-title">Position - X</div>
+					<input class="view-scaler" type="range" value="{viewX}" min="-200" max="300" step="5" ng-model="viewX">
+					<div class = "button_pannel-title">Position - Y</div>
+					<input class="view-scaler" type="range" value="{viewY}" min="-200" max="300" step="5" ng-model="viewY">					
+				</div>
+
+
+
+				<div class="button_pannel_area button_pannel_broder-2">
+					<div class = "button_pannel-title">Clocwise face rotations</div>
+					<div ng-repeat="buttonsValue in pannelButtonMaping0">
+						<span ng-repeat="button in buttonsValue">
+							<button type="button" class="btn btn-default" ng-disabled= "isProcessing" ng-click="panelInput(button.value)">{{button.value}}</button>
+						</span>
+					</div>	
+				</div>
+
+				<div class="button_pannel_area button_pannel_broder-3">
+					<div class = "button_pannel-title">Counterclocwise face rotations</div>
+					<div ng-repeat="buttonsValue in pannelButtonMaping1">
+						<span ng-repeat="button in buttonsValue">
+							<button type="button" class="btn btn-default" ng-disabled= "isProcessing" ng-click="panelInput(button.value)">{{button.value}}</button>
+						</span>
+					</div>						
+
+				</div>	
+
+				<div class="button_pannel_area button_pannel_broder-4" ng-class="{button_pannel_area_disappear: cubeDimension % 2 == 0}">
+					<div class = "button_pannel-title">Slice turns</div>
+					<div ng-repeat="buttonsValue in pannelButtonMaping2">
+						<span ng-repeat="button in buttonsValue">
+							<button type="button" class="btn btn-default" ng-disabled= "isProcessing" ng-click="panelInput(button.value)">{{button.value}}</button>
+						</span>
+					</div>	
+				</div>		
+
+				<div class="button_pannel_area  button_pannel_broder-5">
+					<div class = "button_pannel-title">Whole cube rotations</div>
+					<div ng-repeat="buttonsValue in pannelButtonMaping3">
+						<span ng-repeat="button in buttonsValue">
+							<button type="button" class="btn btn-default" ng-disabled= "isProcessing" ng-click="panelInput(button.value)">{{button.value}}</button>
+						</span>
+					</div>	
+				</div>	
+
+				<div class="button_pannel_area button_pannel_broder-1" ng-hide="inputSolution">		
+					<div class = "button_pannel-title">Random rotations</div>
+					<!--<button type="button" class="btn btn-default" ng-click="RandomMovement()" ng-disabled= "isProcessing">Random Move</button>-->
+					<button type="button" class="btn btn-default" ng-click="RandomInitialization()" ng-disabled= "isProcessing">Randomize</button>
+				</div>
+<!--
+				<div class="button_pannel_area button_pannel_broder-2" ng-hide="inputSolution">		
+					<div class = "button_pannel-title">Transform to</div>
+					<button type="button" class="btn btn-default" ng-click="transformTo(2)">2x2</button>
+					<button type="button" class="btn btn-default" ng-click="transformTo(3)">3x3</button>
+					<button type="button" class="btn btn-default" ng-click="transformTo(4)">4x4</button>							
+					<button type="button" class="btn btn-default" ng-click="transformTo(5)">5x5</button>	
+				</div>-->
+
+			</div>
+		</div>
+
+	</nav>
+
+</div>

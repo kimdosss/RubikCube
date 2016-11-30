@@ -1,140 +1,8 @@
-/*F0F0F0*/
-/*#F8DC0B*/
-/*#004687*/
-/*#3EC303*/
-/*#B81D18*/
-/*#FF5A09*/
-[type=range] {
-  -webkit-appearance: none;
-  margin: 9px 0;
-  width: 100%; }
-  [type=range]:focus {
-    outline: none; }
-  [type=range]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 5px;
-    cursor: pointer;
-    transition: all .2s ease;
-    box-shadow: 2px 2px 2px #222, 0 0 2px #2f2f2f;
-    background: #D5D5D5;
-    border: 1px solid #000;
-    border-radius: 0px; }
-  [type=range]::-webkit-slider-thumb {
-    box-shadow: 1px 1px 1px #111, 0 0 1px #1e1e1e;
-    border: 1px solid #2c2c2c;
-    height: 18px;
-    width: 18px;
-    border-radius: 50%;
-    background: #7B5995;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -7.5px; }
-  [type=range]:focus::-webkit-slider-runnable-track {
-    background: #e2e2e2; }
-  [type=range]::-moz-range-track {
-    width: 100%;
-    height: 5px;
-    cursor: pointer;
-    transition: all .2s ease;
-    box-shadow: 2px 2px 2px #222, 0 0 2px #2f2f2f;
-    background: #D5D5D5;
-    border: 1px solid #000;
-    border-radius: 0px; }
-  [type=range]::-moz-range-thumb {
-    box-shadow: 1px 1px 1px #111, 0 0 1px #1e1e1e;
-    border: 1px solid #2c2c2c;
-    height: 18px;
-    width: 18px;
-    border-radius: 50%;
-    background: #7B5995;
-    cursor: pointer; }
-  [type=range]::-ms-track {
-    width: 100%;
-    height: 5px;
-    cursor: pointer;
-    transition: all .2s ease;
-    background: transparent;
-    border-color: transparent;
-    border-width: 18px 0;
-    color: transparent; }
-  [type=range]::-ms-fill-lower {
-    box-shadow: 2px 2px 2px #222, 0 0 2px #2f2f2f;
-    background: #c8c8c8;
-    border: 1px solid #000;
-    border-radius: 0px; }
-  [type=range]::-ms-fill-upper {
-    box-shadow: 2px 2px 2px #222, 0 0 2px #2f2f2f;
-    background: #D5D5D5;
-    border: 1px solid #000;
-    border-radius: 0px; }
-  [type=range]::-ms-thumb {
-    box-shadow: 1px 1px 1px #111, 0 0 1px #1e1e1e;
-    border: 1px solid #2c2c2c;
-    height: 18px;
-    width: 18px;
-    border-radius: 50%;
-    background: #7B5995;
-    cursor: pointer; }
-  [type=range]:focus::-ms-fill-lower {
-    background: #D5D5D5; }
-  [type=range]:focus::-ms-fill-upper {
-    background: #e2e2e2; }
-
-.main-wrapper {
-  width: 320px;
-  height: 200px;
-  display: block;
-  text-align: center;
-  position: absolute;
-  top: -20%;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto; }
-
-.main-title {
-  color: #D2D2D2; }
-  .main-title span {
-    padding: 0; }
-  .main-title .main-title-color-1 {
-    color: #B23E43; }
-  .main-title .main-title-color-2 {
-    color: #ECA55E; }
-  .main-title .main-title-color-3 {
-    color: #006F8A; }
-  .main-title .main-title-color-4 {
-    color: #62B13E; }
-  .main-title .main-title-color-5 {
-    color: #D5D5D5; }
-  .main-title .main-title-color-6 {
-    color: #F0570B; }
-
-cube-demo {
-  position: absolute;
-  perspective: 800px;
-  -webkit-perspective: 800px;
-  -moz-perspective: 800px;
-  margin: 55px -30px; }
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle; }
-
 body {
-  background: #3d3d3d;
+  background: #777;
   /*overflow-y: scroll; */
   font: 400 15px/1.8 "Comic Sans MS", cursive, sans-serif;
   height: 100%; }
-
-.btn-default {
-  background-color: #D5D5D5; }
-
-.btn-primary {
-  background-color: #006F8A; }
-
-.btn-primary:hover {
-  background-color: #3988A9; }
 
 .main_area {
   position: absolute;
@@ -142,14 +10,6 @@ body {
   width: 100%;
   /*height: 550px;*/
   background: #fff; }
-
-.nav-bar {
-  width: 100%;
-  position: fixed; }
-
-.view-scaler {
-  width: 85% !important;
-  margin-bottom: 10px; }
 
 .top-bar {
   position: fixed;
@@ -456,88 +316,88 @@ body {
     transform: rotateZ(0deg); } }
 /* movement notation: spin_effect_(xyz rotate axis)(positive/negative direction)_(spin parts side/top) */
 .spin_effect_yp_s {
-  animation: spin_yp_s 0.25s ease-in-out forwards;
-  -webkit-animation: spin_yp_s 0.25s ease-in-out forwards;
-  -moz-animation: spin_yp_s 0.25s ease-in-out forwards;
-  -o-animation: spin_yp_s 0.25s ease-in-out forwards; }
+  animation: spin_yp_s 0.3s ease-in-out forwards;
+  -webkit-animation: spin_yp_s 0.3s ease-in-out forwards;
+  -moz-animation: spin_yp_s 0.3s ease-in-out forwards;
+  -o-animation: spin_yp_s 0.3s ease-in-out forwards; }
 
 .spin_effect_yp_t {
-  animation: spin_yp_t 0.25s ease-in-out forwards;
-  -webkit-animation: spin_yp_t 0.25s ease-in-out forwards;
-  -moz-animation: spin_yp_t 0.25s ease-in-out forwards;
-  -o-animation: spin_yp_t 0.25s ease-in-out forwards; }
+  animation: spin_yp_t 0.3s ease-in-out forwards;
+  -webkit-animation: spin_yp_t 0.3s ease-in-out forwards;
+  -moz-animation: spin_yp_t 0.3s ease-in-out forwards;
+  -o-animation: spin_yp_t 0.3s ease-in-out forwards; }
 
 .spin_effect_yn_s {
-  animation: spin_yn_s 0.25s ease-in-out forwards;
-  -webkit-animation: spin_yn_s 0.25s ease-in-out forwards;
-  -moz-animation: spin_yn_s 0.25s ease-in-out forwards;
-  -o-animation: spin_yn_s 0.25s ease-in-out forwards; }
+  animation: spin_yn_s 0.3s ease-in-out forwards;
+  -webkit-animation: spin_yn_s 0.3s ease-in-out forwards;
+  -moz-animation: spin_yn_s 0.3s ease-in-out forwards;
+  -o-animation: spin_yn_s 0.3s ease-in-out forwards; }
 
 .spin_effect_yn_t {
-  animation: spin_yn_t 0.25s ease-in-out forwards;
-  -webkit-animation: spin_yn_t 0.25s ease-in-out forwards;
-  -moz-animation: spin_yn_t 0.25s ease-in-out forwards;
-  -o-animation: spin_yn_t 0.25s ease-in-out forwards; }
+  animation: spin_yn_t 0.3s ease-in-out forwards;
+  -webkit-animation: spin_yn_t 0.3s ease-in-out forwards;
+  -moz-animation: spin_yn_t 0.3s ease-in-out forwards;
+  -o-animation: spin_yn_t 0.3s ease-in-out forwards; }
 
 .spin_effect_xp_s {
-  animation: spin_xp_s 0.25s ease-in-out forwards;
-  -webkit-animation: spin_xp_s 0.25s ease-in-out forwards;
-  -moz-animation: spin_xp_s 0.25s ease-in-out forwards;
-  -o-animation: spin_xp_s 0.25s ease-in-out forwards; }
+  animation: spin_xp_s 0.3s ease-in-out forwards;
+  -webkit-animation: spin_xp_s 0.3s ease-in-out forwards;
+  -moz-animation: spin_xp_s 0.3s ease-in-out forwards;
+  -o-animation: spin_xp_s 0.3s ease-in-out forwards; }
 
 .spin_effect_xp_t {
-  animation: spin_xp_t 0.25s ease-in-out forwards;
-  -webkit-animation: spin_xp_t 0.25s ease-in-out forwards;
-  -moz-animation: spin_xp_t 0.25s ease-in-out forwards;
-  -o-animation: spin_xp_t 0.25s ease-in-out forwards; }
+  animation: spin_xp_t 0.3s ease-in-out forwards;
+  -webkit-animation: spin_xp_t 0.3s ease-in-out forwards;
+  -moz-animation: spin_xp_t 0.3s ease-in-out forwards;
+  -o-animation: spin_xp_t 0.3s ease-in-out forwards; }
 
 .spin_effect_xn_s {
-  animation: spin_xn_s 0.25s ease-in-out forwards;
-  -webkit-animation: spin_xn_s 0.25s ease-in-out forwards;
-  -moz-animation: spin_xn_s 0.25s ease-in-out forwards;
-  -o-animation: spin_xn_s 0.25s ease-in-out forwards; }
+  animation: spin_xn_s 0.3s ease-in-out forwards;
+  -webkit-animation: spin_xn_s 0.3s ease-in-out forwards;
+  -moz-animation: spin_xn_s 0.3s ease-in-out forwards;
+  -o-animation: spin_xn_s 0.3s ease-in-out forwards; }
 
 .spin_effect_xn_t {
-  animation: spin_xn_t 0.25s ease-in-out forwards;
-  -webkit-animation: spin_xn_t 0.25s ease-in-out forwards;
-  -moz-animation: spin_xn_t 0.25s ease-in-out forwards;
-  -o-animation: spin_xn_t 0.25s ease-in-out forwards; }
+  animation: spin_xn_t 0.3s ease-in-out forwards;
+  -webkit-animation: spin_xn_t 0.3s ease-in-out forwards;
+  -moz-animation: spin_xn_t 0.3s ease-in-out forwards;
+  -o-animation: spin_xn_t 0.3s ease-in-out forwards; }
 
 .spin_effect_zp_s_0 {
-  animation: spin_zp_s_0 0.25s ease-in-out forwards;
-  -webkit-animation: spin_zp_s_0 0.25s ease-in-out forwards;
-  -moz-animation: spin_zp_s_0 0.25s ease-in-out forwards;
-  -o-animation: spin_zp_s_0 0.25s ease-in-out forwards; }
+  animation: spin_zp_s_0 0.3s ease-in-out forwards;
+  -webkit-animation: spin_zp_s_0 0.3s ease-in-out forwards;
+  -moz-animation: spin_zp_s_0 0.3s ease-in-out forwards;
+  -o-animation: spin_zp_s_0 0.3s ease-in-out forwards; }
 
 .spin_effect_zp_s_1 {
-  animation: spin_zp_s_1 0.25s ease-in-out forwards;
-  -webkit-animation: spin_zp_s_1 0.25s ease-in-out forwards;
-  -moz-animation: spin_zp_s_1 0.25s ease-in-out forwards;
-  -o-animation: spin_zp_s_1 0.25s ease-in-out forwards; }
+  animation: spin_zp_s_1 0.3s ease-in-out forwards;
+  -webkit-animation: spin_zp_s_1 0.3s ease-in-out forwards;
+  -moz-animation: spin_zp_s_1 0.3s ease-in-out forwards;
+  -o-animation: spin_zp_s_1 0.3s ease-in-out forwards; }
 
 .spin_effect_zp_t {
-  animation: spin_zp_t 0.25s ease-in-out forwards;
-  -webkit-animation: spin_zp_t 0.25s ease-in-out forwards;
-  -moz-animation: spin_zp_t 0.25s ease-in-out forwards;
-  -o-animation: spin_zp_t 0.25s ease-in-out forwards; }
+  animation: spin_zp_t 0.3s ease-in-out forwards;
+  -webkit-animation: spin_zp_t 0.3s ease-in-out forwards;
+  -moz-animation: spin_zp_t 0.3s ease-in-out forwards;
+  -o-animation: spin_zp_t 0.3s ease-in-out forwards; }
 
 .spin_effect_zn_s_0 {
-  animation: spin_zn_s_0 0.25s ease-in-out forwards;
-  -webkit-animation: spin_zn_s_0 0.25s ease-in-out forwards;
-  -moz-animation: spin_zn_s_0 0.25s ease-in-out forwards;
-  -o-animation: spin_zn_s_0 0.25s ease-in-out forwards; }
+  animation: spin_zn_s_0 0.3s ease-in-out forwards;
+  -webkit-animation: spin_zn_s_0 0.3s ease-in-out forwards;
+  -moz-animation: spin_zn_s_0 0.3s ease-in-out forwards;
+  -o-animation: spin_zn_s_0 0.3s ease-in-out forwards; }
 
 .spin_effect_zn_s_1 {
-  animation: spin_zn_s_1 0.25s ease-in-out forwards;
-  -webkit-animation: spin_zn_s_1 0.25s ease-in-out forwards;
-  -moz-animation: spin_zn_s_1 0.25s ease-in-out forwards;
-  -o-animation: spin_zn_s_1 0.25s ease-in-out forwards; }
+  animation: spin_zn_s_1 0.3s ease-in-out forwards;
+  -webkit-animation: spin_zn_s_1 0.3s ease-in-out forwards;
+  -moz-animation: spin_zn_s_1 0.3s ease-in-out forwards;
+  -o-animation: spin_zn_s_1 0.3s ease-in-out forwards; }
 
 .spin_effect_zn_t {
-  animation: spin_zn_t 0.25s ease-in-out forwards;
-  -webkit-animation: spin_zn_t 0.25s ease-in-out forwards;
-  -moz-animation: spin_zn_t 0.25s ease-in-out forwards;
-  -o-animation: spin_zn_t 0.25s ease-in-out forwards; }
+  animation: spin_zn_t 0.3s ease-in-out forwards;
+  -webkit-animation: spin_zn_t 0.3s ease-in-out forwards;
+  -moz-animation: spin_zn_t 0.3s ease-in-out forwards;
+  -o-animation: spin_zn_t 0.3s ease-in-out forwards; }
 
 cube {
   position: absolute;
@@ -546,7 +406,7 @@ cube {
   -webkit-perspective: 800px;
   -moz-perspective: 800px;
   margin-left: 100px;
-  margin-top: 80px; }
+  margin-top: 100px; }
 
 cube-faces {
   position: absolute;
@@ -556,22 +416,22 @@ cube-faces {
   z-index: 0; }
 
 .face0 div {
-  background: #D5D5D5; }
+  background: #F0F0F0; }
 
 .face1 div {
-  background: #ECA55E; }
+  background: #004687; }
 
 .face2 div {
-  background: #006F8A; }
+  background: #FF5A09; }
 
 .face3 div {
-  background: #62B13E; }
+  background: #3EC303; }
 
 .face4 div {
-  background: #B23E43; }
+  background: #F8DC0B; }
 
 .face5 div {
-  background: #F0570B; }
+  background: #B81D18; }
 
 .arrowx {
   display: none;
@@ -676,31 +536,13 @@ control-pannel-button {
   height: 50px;
   width: 50px; }
 
-.side-bar {
-  z-index: 50;
-  width: 240px;
-  position: fixed;
-  right: 0;
-  height: 100%;
-  transition: 0.5s;
-  color: #D5D5D5; }
-
-.side-bar-right {
-  right: -205px; }
-
-/*@include keyframes_test(collapse-right, right:0, right:$side-bar-width);*/
 .button_pannel_show {
-  position: absolute;
-  top: 40%;
-  right: 143px;
-  height: 40px;
-  -webkit-transform: rotate(-90deg);
-  transform: rotate(-90deg); }
+  display: block;
+  margin: 10px auto; }
 
 .button_pannel {
   /*position: absolute;*/
-  margin-left: 40px;
-  height: 100%; }
+  margin-left: 50px; }
   .button_pannel .button_pannel-title {
     font-size: 15px;
     font-weight: 600; }
@@ -717,167 +559,14 @@ control-pannel-button {
     visibility: visible;
     opacity: 1;
     transition: 1s;
-    display: block;
-    background: #333;
-    border-top: 1px #222 solid;
-    padding: 3px 12px 10px 10px; }
-  .button_pannel .button_pannel_broder-1 {
-    border-left: 8px #ECA55E solid;
-    /*#D08846*/ }
-  .button_pannel .button_pannel_broder-2 {
-    border-left: 8px #B23E43 solid;
-    /*#B23E43*/ }
-  .button_pannel .button_pannel_broder-3 {
-    border-left: 8px #62B13E solid;
-    /*#328683*/ }
-  .button_pannel .button_pannel_broder-4 {
-    border-left: 8px #006F8A solid;
-    /*#006F8A*/ }
-  .button_pannel .button_pannel_broder-5 {
-    border-left: 8px #F0570B solid;
-    /*#61447C*/ }
+    display: inline-block;
+    width: 45%; }
   .button_pannel .button_pannel_area_disappear {
     height: 0;
     opacity: 0;
-    padding: 0;
     visibility: hidden;
-    transition: 1s;
-    border-width: 0px; }
+    transition: 1s; }
   .button_pannel #button_pannel_container {
-    width: 200px;
-    background: #333;
-    padding: 30px 0px 0px 0px;
-    overflow-y: scroll;
-    height: 100%;
-    box-shadow: -7px 5px 30px  #111; }
-  .button_pannel .button_pannel-solution {
-    position: absolute;
-    width: 200px;
-    background: #fff;
-    height: 30px;
-    transition: 0.5s ease-in-out;
-    overflow-y: hidden;
-    overflow-x: hidden; }
-  .button_pannel .button_pannel-solution-display {
-    width: 100%;
-    height: 130px;
-    overflow-y: scroll;
-    background: #333;
-    position: absolute;
-    padding: 5px 10px; }
-  .button_pannel .button_pannel-solution-display-selected {
-    color: #B23E43; }
-  .button_pannel .button_pannel-solution-display-index-title {
-    float: left;
-    clear: left;
-    padding: 0px 10px;
-    width: 30%;
-    text-align: center;
-    display: inline-block; }
-  .button_pannel .button_pannel-solution-display-content-title {
-    float: right;
-    clear: right;
-    padding: 0px 10px;
-    width: 65%;
-    text-align: center;
-    display: inline-block; }
-  .button_pannel .button_pannel-solution-display-index {
-    float: left;
-    clear: left;
-    padding: 2px 10px;
-    width: 30%;
-    text-align: center;
-    display: inline-block; }
-  .button_pannel .button_pannel-solution-display-content {
-    float: right;
-    clear: right;
-    padding: 2px 10px;
-    width: 65%;
-    text-align: center;
-    display: inline-block; }
-  .button_pannel .button_pannel-solution-btn-wrapper {
-    position: absolute;
-    /*left: $button_pannel-solution-display-width + 15 + px; */
-    bottom: 30px;
-    width: 100%;
-    margin: 0px; }
-    .button_pannel .button_pannel-solution-btn-wrapper .button_pannel-solution-btn {
-      width: 27%;
-      padding-left: 7px;
-      height: 30px; }
-    .button_pannel .button_pannel-solution-btn-wrapper .button_pannel-solution-btn-question {
-      width: 19%;
-      height: 30px; }
-  .button_pannel .button_pannel-solution-btn {
-    display: block; }
-  .button_pannel .button_pannel-solution-showBtn {
-    width: 100%;
-    background: #006F8A;
-    position: absolute;
-    height: 30px;
-    bottom: 0; }
-    .button_pannel .button_pannel-solution-showBtn span {
-      transition: 0.5s ease-in-out;
-      width: 20px;
-      margin: 7px 90px; }
-  .button_pannel .button_pannel-solution-show {
-    height: 190px; }
-    .button_pannel .button_pannel-solution-show .button_pannel-solution-showBtn span {
-      -webkit-transform: rotate(180deg);
-      transform: rotate(180deg); }
+    width: 100%; }
 
-.return_btn {
-  position: fixed;
-  z-index: 200;
-  width: 20px;
-  height: 20px;
-  margin-top: 12px;
-  margin-left: 12px; }
-  .return_btn span {
-    color: #d2d2d2;
-    font-size: 30px;
-    cursor: pointer; }
-
-/*
- * Animations 
- * ---------- */
-.button_pannel-solution-display-row.ng-enter {
-  -webkit-transition: 0.5s linear all;
-  -moz-transition: 0.5s linear all;
-  -o-transition: 0.5s linear all;
-  transition: 0.5s linear all;
-  max-height: 0;
-  opacity: 0;
-  left: -100px; }
-
-.button_pannel-solution-display-row.ng-enter.ng-enter-active {
-  max-height: 90px;
-  opacity: 1;
-  left: 0; }
-
-.button_pannel-solution-display-row.ng-leave {
-  -webkit-animation: 0.5s repeat_item_effect;
-  -moz-animation: 0.5s repeat_item_effect;
-  -o-animation: 0.5s repeat_item_effect;
-  animation: 0.5s repeat_item_effect; }
-
-@keyframes repeat_item_effect {
-  from {
-    max-height: 90px;
-    opacity: 1;
-    left: 0; }
-  to {
-    max-height: 0;
-    opacity: 0;
-    left: -100px; } }
-@-webkit-keyframes repeat_item_effect {
-  from {
-    max-height: 90px;
-    opacity: 1;
-    left: 0; }
-  to {
-    max-height: 0;
-    opacity: 0;
-    left: -50px; } }
-
-/*# sourceMappingURL=index.css.map */
+/*# sourceMappingURL=index,css.map */

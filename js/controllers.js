@@ -1,13 +1,26 @@
 var appCon = angular.module('appCon', []);
 
-appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
+appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$stateParams','$state','$interval', function($scope,$timeout,$window,$document,$stateParams,$state,$interval){
 	//necessary varibles
-	$scope.animation_process_time = 250;
+	$scope.animation_process_time = 250;//250
 	$scope.isProcessing = false;
-	$scope.faceNum = 6;
-	$scope.cubeDimension = 3;
+	$scope.faceNum = 6;	
 	$scope.disableAimation = false;
 	$scope.innerFacesNum = $scope.cubeDimension * $scope.cubeDimension;
+
+
+
+
+	$timeout(function () {
+		var dimension = $stateParams.dim;
+		if (dimension !== undefined) {
+			$scope.transformTo(dimension);
+		} else {
+			var dim = Math.floor(Math.random() * 3) + 2;
+			$scope.transformTo(dim);
+		}		
+	}, 0);
+
 
 	//check browser
 	var is_chrome = navigator.userAgent.indexOf('Chrome') > -1;
@@ -114,7 +127,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 	$scope.ResetCube();
 
 	//Notation convert
-	$scope.Notation = function(notation) {
+	$scope.Notation = function(notation) {		
 		var axis, direction, layer, firstParam, secondParam, thirdParam;
 		firstParam = notation.charAt(0);
 		secondParam = notation.charAt(1);
@@ -156,7 +169,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 		}
 
 		if (firstParam == 'X' || firstParam == 'Y' || firstParam == 'Z') {
-			if (thirdParam == '`') {
+			if (secondParam == '`') {
 				direction = 'p';
 			} else {
 				direction = 'n';
@@ -174,7 +187,6 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 			$scope.DoulbeRotate(axis, direction, layer);
 		} else if (notation == 'X' || notation == 'X`' || notation == 'Y' || notation == 'Y`' || notation == 'Z' || notation == 'Z`') {
 			$scope.WholeRotate(axis, direction);
-
 		} else {
 			$scope.Rotate(axis, direction, layer);
 		}
@@ -380,13 +392,14 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 		}
 		
 		
-		$timeout(function () {
+		$timeout(function () {			
       		$scope.CompleteMovement();
   		}, $scope.animation_process_time);
 		
 	}
 
 	$scope.WholeRotate = function(axis, rotatedirection){
+		
 		for (var i = 0; i < $scope.cubeDimension; i++) {
 			var layer = i;
 			$scope.Rotate(axis, rotatedirection, layer);
@@ -405,7 +418,6 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 
 	$scope.RotateMovement = function(affectedFaces, axis, rotatedirection, layer) {
 		var spin_faces_side = [], spin_faces_top = [];
-
 		for (var i = 0; i < affectedFaces.length; i++) {
 			if (i < $scope.cubeDimension) { //side faces
 				for (var j = 0; j < affectedFaces[i].length; j++) {
@@ -460,6 +472,176 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 	}
 
 
+/*---------------------- rotate gestures -------------------------------------*/
+	$scope.rotateGesture = function(start,faceIndex,innerFaceIndex){
+		if (start) {
+			$scope.rotateDragPosition = [faceIndex, innerFaceIndex]
+		} else {
+			if ($scope.rotateDragPosition !== undefined) {
+
+				if ($scope.rotateDragPosition[0] == faceIndex) {
+					//rotate when gesture on the same face
+					//locate the target inner face
+					var row = Math.floor($scope.rotateDragPosition[1] / $scope.cubeDimension);
+					var col = $scope.rotateDragPosition[1] % $scope.cubeDimension;
+
+					var move = innerFaceIndex - $scope.rotateDragPosition[1],
+						dragDirection, axis, direction, layer;					
+					//move 1:right -1:left +dimension:down -dimension:up
+					switch (move) {
+					    case 1:
+					    	dragDirection = "right";
+					        break; 
+					    case -1:
+					    	dragDirection = "left";					        
+					        break; 
+					    case $scope.cubeDimension:
+					    	dragDirection = "down";
+					        break; 
+					    case -$scope.cubeDimension:
+					    	dragDirection = "up";
+					        break; 				        					        
+					    default: 
+					    	dragDirection = null;
+					        console.log("rotateGesture 1 error");
+					}
+					if (dragDirection != null) {
+						//start rotate if gesture is correct
+						var selectIndex;
+						var rotateCombo = {};
+						if (faceIndex == 0 || faceIndex == 1) {
+							rotateCombo[1] = {axis:'x', direction:'n', layer:$scope.cubeDimension - col - 1};
+							rotateCombo[-1] = {axis:'x', direction:'p', layer:$scope.cubeDimension - col - 1};
+							rotateCombo[2] = {axis:'y', direction:'n', layer:row};
+							rotateCombo[-2] = {axis:'y', direction:'p', layer:row};
+
+						}
+
+						if (faceIndex == 2 || faceIndex == 3) {
+							rotateCombo[1] = {axis:'x', direction:'n', layer:$scope.cubeDimension - col - 1};
+							rotateCombo[-1] = {axis:'x', direction:'p', layer:$scope.cubeDimension - col - 1};
+							rotateCombo[2] = {axis:'z', direction:'p', layer:$scope.cubeDimension - row - 1};
+							rotateCombo[-2] = {axis:'z', direction:'n', layer:$scope.cubeDimension - row - 1};
+
+						}
+
+						if (faceIndex == 4 || faceIndex == 5) {
+							rotateCombo[1] = {axis:'z', direction:'p', layer:col};
+							rotateCombo[-1] = {axis:'z', direction:'n', layer:col};
+							rotateCombo[2] = {axis:'y', direction:'n', layer:row};
+							rotateCombo[-2] = {axis:'y', direction:'p', layer:row};
+
+						}
+
+						switch (dragDirection) {
+						    case "up":
+						    	selectIndex = 1
+						        break; 
+						    case "down":
+						    	selectIndex = -1
+						        break; 
+						    case "left":
+						    	selectIndex = 2
+						        break; 
+						    case "right":
+						    	selectIndex = -2
+						        break;        					        
+						    default: 							    	
+						        console.log("rotateGesture 2 error");
+						}
+
+						if (faceIndex == 1 || faceIndex == 3 || faceIndex == 5) {
+							selectIndex = -1 * selectIndex;
+						}
+						if (rotateCombo !== undefined) {
+							//console.log(rotateCombo[selectIndex]);
+							axis = rotateCombo[selectIndex].axis;
+							direction = rotateCombo[selectIndex].direction;
+							layer =  rotateCombo[selectIndex].layer;
+							$timeout(function () {			
+					      		$scope.Rotate(axis, direction, layer);
+
+					  		}, 100);
+
+							
+						}
+
+					}
+				}			
+
+			}
+			$scope.rotateDragPosition = undefined;
+		}
+		
+	}
+
+	$scope.rotateGestureVer2 = function(start,faceIndex,innerFaceIndex){
+		var dragDirection = start;
+		if (dragDirection != null) {
+
+			var row = Math.floor(innerFaceIndex / $scope.cubeDimension);
+			var col = innerFaceIndex % $scope.cubeDimension;
+			var selectIndex;
+			var rotateCombo = {};
+			if (faceIndex == 0 || faceIndex == 1) {
+				rotateCombo[1] = {axis:'x', direction:'n', layer:$scope.cubeDimension - col - 1};
+				rotateCombo[-1] = {axis:'x', direction:'p', layer:$scope.cubeDimension - col - 1};
+				rotateCombo[2] = {axis:'y', direction:'n', layer:row};
+				rotateCombo[-2] = {axis:'y', direction:'p', layer:row};
+
+			}
+
+			if (faceIndex == 2 || faceIndex == 3) {
+				rotateCombo[1] = {axis:'x', direction:'n', layer:$scope.cubeDimension - col - 1};
+				rotateCombo[-1] = {axis:'x', direction:'p', layer:$scope.cubeDimension - col - 1};
+				rotateCombo[2] = {axis:'z', direction:'p', layer:$scope.cubeDimension - row - 1};
+				rotateCombo[-2] = {axis:'z', direction:'n', layer:$scope.cubeDimension - row - 1};
+
+			}
+
+			if (faceIndex == 4 || faceIndex == 5) {
+				rotateCombo[1] = {axis:'z', direction:'p', layer:col};
+				rotateCombo[-1] = {axis:'z', direction:'n', layer:col};
+				rotateCombo[2] = {axis:'y', direction:'n', layer:row};
+				rotateCombo[-2] = {axis:'y', direction:'p', layer:row};
+
+			}
+
+			switch (dragDirection) {
+			    case "up":
+			    	selectIndex = 1
+			        break; 
+			    case "down":
+			    	selectIndex = -1
+			        break; 
+			    case "left":
+			    	selectIndex = 2
+			        break; 
+			    case "right":
+			    	selectIndex = -2
+			        break;        					        
+			    default: 							    	
+			        console.log("rotateGesture 2 error");
+			}
+
+			if (faceIndex == 1 || faceIndex == 3 || faceIndex == 5) {
+				selectIndex = -1 * selectIndex;
+			}
+			if (rotateCombo !== undefined) {
+				//console.log(rotateCombo[selectIndex]);
+				axis = rotateCombo[selectIndex].axis;
+				direction = rotateCombo[selectIndex].direction;
+				layer =  rotateCombo[selectIndex].layer;
+				$timeout(function () {			
+		      		$scope.Rotate(axis, direction, layer);
+
+		  		}, 1);
+
+				
+			}
+
+		}
+	}
 /*----------------------  public function -------------------------------------*/
 	$scope.RotateDataPositive = function(RotateData) {
 		var faceIndex, innerFaceIndex, faceindex1, innerFaceIndex1, store, store1;
@@ -515,6 +697,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 	}
 
 	$scope.CompleteMovement = function() {
+		
 		var complete = true, cubeDimension = $scope.cubeDimension;
 		for (var i = 0; i < $scope.faceNum; i++) {
 			for (var j = 0; j < cubeDimension * cubeDimension; j++) {
@@ -534,8 +717,12 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 		}
 		if (complete) {
 			console.log(complete);
+			$scope.$broadcast('checkCubeComplete', true);
 		}
-		$scope.isProcessing = false;
+		$timeout(function () {			
+      		$scope.isProcessing = false;
+  		}, 50);
+		
 	}
 
 	$scope.RandomMovement = function() {
@@ -563,11 +750,12 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 
 	$scope.transformTo = function(dimension) {
 		if ($scope.cubeDimension !== dimension) {
-			//var transform = confirm("Transform to different dimension will reset the cube. Do you want to transform?");
-			//if (transform) {
+			var transform = true;
+			//confirm("Transform to different dimension will reset the cube. Do you want to transform?");
+			if (transform) {
 			    $scope.cubeDimension = dimension;
 				$scope.ResetCube();
-			//}			
+			}			
 		}
 	}
 	//Solution
@@ -782,9 +970,118 @@ appCon.controller('cubeCon', ['$scope', '$timeout', function($scope,$timeout){
 	}
 
 
+	/*---------------------------------*/
+	$scope.$on('rotate', function(event,notation){
+		$scope.Notation(notation);
+	});
+
+	$scope.$on('submitSolution', function(event,solution){
+		if (solution.length > 0) {
+			for (var i = 0; i < solution.length; i++) {
+				$scope.Notation(solution[i]);
+			}
+		}
+	});
+	/*-----------------------Main page demo only------------------*/
+	if ($state.current.name == 'main') {
+		$interval(function() {
+			$scope.RandomMovement();
+        }, 3000);
+
+	}
+	/*----------------------UI tools-------------------------*/
+	$scope.returnToMain = function(){
+		var isReturn = confirm("Return to menu. All process will be lost.");
+		if (isReturn) {
+			history.back();
+		}
+	}
+
+	$scope.$on('startPlayCube', function(){
+		$scope.RandomInitialization();
+	});
 }])
 
 
 
+appCon.controller('mainCon', ['$scope', '$state', function($scope,$state){
+	$scope.selectCube = function(dim){
+		$state.go('cube', {dim:dim}, {reload: true});		
+	}
+
+}])
+
+appCon.controller('viewCon', ['$scope', '$anchorScroll', '$location', '$stateParams',function($scope,$anchorScroll,$location,$stateParams){
+
+	$scope.$broadcast('initialize', {dim:$stateParams.dim})
+
+	$scope.hideBar = false;
+	$scope.inputSolution = false;
+	$scope.storeSolution = [];
+	$scope.selectedItem = null;
+	$scope.scrollSolutionItemIndex = 123;
+	
+	var cube = document.getElementsByTagName('cube')[0];
+	$scope.viewScale = window.innerHeight / 520 * 100;
+	$scope.viewX = 0;
+	$scope.viewY = 0;
+
+	$scope.$watchGroup(['viewScale', 'viewX', 'viewY'], function(newValue, oldValue){
+		cube.style.transform = 'scale(' + $scope.viewScale / 100 + ')' + 'translateX(' + $scope.viewX + 'px)' + 'translateY(' + $scope.viewY + 'px)';	
+	
+	});
+
+	$scope.$on('screenOrientation', function(event,screenHeight){
+		$scope.viewScale = screenHeight / 520 * 100;
+		$scope.$digest();
+	});
+
+	$scope.panelInput = function(button){
+		if (!$scope.inputSolution) {
+			//solution panel is not actived
+			$scope.$emit('rotate', button)
+		} else {
+			if ($scope.selectedItem === null) {
+				//item is not selected
+				$scope.storeSolution.push(button);
+				$scope.scrollSolutionItemIndex = $scope.storeSolution.length - 2;
+			} else {				
+				$scope.storeSolution.splice($scope.selectedItem, 0, button);
+				$scope.selectedItem++;
+				$scope.scrollSolutionItemIndex = $scope.selectedItem - 2;
+			}
+			
+			
+		}
+	}
+
+	$scope.submitSolution = function(){		
+		$scope.$emit('submitSolution', $scope.storeSolution)
+		$scope.storeSolution = [];
+		$scope.storeSolution.length = 0;
+		$scope.inputSolution = false;
+	}
+	
+	$scope.selectSolutionItem = function(index){
+		if ($scope.selectedItem !== index) {
+			$scope.selectedItem = index;
+		} else {
+			$scope.selectedItem = null;
+		}
+	}
+
+	$scope.deleteSolutionItem = function(){
+		if ($scope.selectedItem !== null) {
+			$scope.storeSolution.splice($scope.selectedItem, 1);
+			$scope.selectedItem = null;
+		}
+	}
+
+	$scope.clearSolutionItem = function(){
+		$scope.storeSolution = [];
+		
+	}	
+
+}])
 
 

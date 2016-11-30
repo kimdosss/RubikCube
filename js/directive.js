@@ -7,12 +7,13 @@ appDirtive.directive('cube', ['$document', function($document) {
 	    	'<control-pannel pannel-button-maping = "cubeButtonMaping"></control-pannel>' +
 	    	'<cube-faces ng-repeat = "(faceIndex,innerFaceMaping) in facesMaping" faces-position = "faceIndex" is-safari = isSafari face-dimension = "cubeDimension">' + 
 	    		'<div cube-inner-container ng-repeat = "(innerFaceIndex, innerFaceData) in innerFaceMaping" face-index = "faceIndex" face-dimension = "cubeDimension" is-safari = "isSafari" spin-effect = "innerFaceData.spin">' + 
-	    			'<cube-inner-faces face-index = "faceIndex" inner-face-index = "innerFaceIndex" inner-face-data = "innerFaceData" face-dimension = "cubeDimension" class = "{{innerFaceData.value}}">' +
+	    			'<cube-inner-faces face-index = "faceIndex" inner-face-index = "innerFaceIndex" inner-face-data = "innerFaceData" face-dimension = "cubeDimension" rotate-gesture-ver2 = "rotateGestureVer2(start,faceIndex,innerFaceIndex)" is-processing = "isProcessing" class = "{{innerFaceData.value}}">' +
 					'</cube-inner-faces>' +
 				'</div>' +
 			'</cube-faces>' + 
 		'</div>' + 
-		'<rotate-view-pannel></rotate-view-pannel>' +
+		'<rotate-view-btn></rotate-view-btn>' +
+		//'<rotate-view-pannel></rotate-view-pannel>' +
 		'<timer></timer>',
 	    restrict: 'E',
 		controller: function($scope) {
@@ -26,7 +27,7 @@ appDirtive.directive('cube', ['$document', function($document) {
 			//Cube rotate effect
 			var cube = element.find('div');
 			var rotateDegX = -25;
-			var rotateDegY = -25;
+			var rotateDegY = -30;
 			var rotatePreDegX, rotatePreDegY;
 			var cubeAdjustPosition = scope.cubeDimension;
 
@@ -63,7 +64,7 @@ appDirtive.directive('cube', ['$document', function($document) {
 				scaleView = 2.6 / newValue;
 	      		SetCubeView(rotateDegX, rotateDegY, scaleView);
 	      	});
-
+/*
 			cube.on('mousedown', function(event) {
 		        // Prevent default dragging of selected content
 		        event.preventDefault();
@@ -86,7 +87,7 @@ appDirtive.directive('cube', ['$document', function($document) {
 		        $document.off('mousemove', mousemove);
 		        $document.off('mouseup', mouseup);
 	      	};
-
+*/
 	      	scope.$watchGroup(['rotateViewX', 'rotateViewY'], function() {
 	      		var rotateSensitiveLvl = 4;
 	      		rotateViewDegX = -scope.rotateViewY * rotateSensitiveLvl;
@@ -179,7 +180,7 @@ appDirtive.directive('cubeFaces', function() {
 	}
 })
 
-appDirtive.directive('cubeInnerContainer', function() {
+appDirtive.directive('cubeInnerContainer', function($document) {
 	return {
 	    restrict: 'A',
 	    scope: {
@@ -189,6 +190,7 @@ appDirtive.directive('cubeInnerContainer', function() {
 	    	isSafari: '='
 	    },
 	    link: function(scope, element, attributes) {
+
 	    	scope.$watch('spinEffect', function() {
 	    		var adjustAxis = 50 * scope.faceDimension;
     			if (scope.faceIndex % 2 == 0) {
@@ -243,13 +245,16 @@ appDirtive.directive('cubeInnerContainer', function() {
 
 appDirtive.directive('cubeInnerFaces', function() {
 	return {
-		template: '<div>{{faceIndex}}-{{innerFaceIndex}}</div>',//{{faceIndex}}-{{innerFaceIndex}}-{{innerFaceData.value}}-id:{{innerFaceData.id}}
+		template: '<div></div>',//{{faceIndex}}-{{innerFaceIndex}}-{{innerFaceData.value}}-id:{{innerFaceData.id}}
 	    restrict: 'E',
 	    scope: {
 	    	faceDimension : '=',
 	    	faceIndex: '=',
 	        innerFaceIndex: '=',
-	        innerFaceData: '='
+	        innerFaceData: '=',
+	        rotateGestureVer2: '&',
+	        isProcessing:'='
+
 	    },	    
 	    link: function(scope, element, attributes) {
 
@@ -261,7 +266,7 @@ appDirtive.directive('cubeInnerFaces', function() {
 	    	var offleft = 100 * column;
 
 			var innerface = element.children();
-			
+			var startX = 0, startY = 0, x = 0, y = 0;
 
 	    	element.css({
 				position: 'absolute',
@@ -271,7 +276,7 @@ appDirtive.directive('cubeInnerFaces', function() {
 				left: offleft + 'px',
 				top: offtop + 'px',
 
-	    	});  	
+	    	});
 
 	    	
 	    	innerface.css({
@@ -280,12 +285,107 @@ appDirtive.directive('cubeInnerFaces', function() {
 	    		//border: borderWidth +'#000 solid',
 	    		width: width - borderWidth * 2 + 'px',
 				height: height - borderWidth * 2 + 'px',
-	    	})	    	
+	    	})
+
+			/*element.on('mousedown touchstart', function(event) {//
+		        // Prevent default dragging of selected content
+		        event.preventDefault();
+		        scope.rotateGesture({start:true,faceIndex:scope.faceIndex,innerFaceIndex:scope.innerFaceIndex})
+
+	      	});
+
+
+			element.on('mouseenter touchend', function(event) {//mouseenter
+		        // Prevent default dragging of selected content
+		        event.preventDefault();
+				scope.rotateGesture({start:false,faceIndex:scope.faceIndex,innerFaceIndex:scope.innerFaceIndex})
+
+
+	      	});*/
+
+
+	      	
+			element.on('touchstart mousedown', onDragRotateStart);
+
+            function onDragRotateStart(event) {            	
+                event.preventDefault();
+                if (event.type == 'touchstart') {
+                	startX = event.touches[0].pageX;
+                	startY = event.touches[0].pageY;
+                }
+                if (event.type == 'mousedown') {
+	 		        startX = event.pageX;
+			        startY = event.pageY;               	
+                }                
+                element.on('touchmove mousemove', onDragRotateMove);
+                element.on('touchend touchcancel mouseup mouseout', onDragRotateEnd);
+            }
+
+            function onDragRotateMove(event) {
+            	var direction;
+                event.preventDefault();
+                if (event.type == 'touchmove') {
+                	coordsX = event.changedTouches[0].pageX;
+                	coordsY = event.changedTouches[0].pageY;
+                }
+                if (event.type == 'mousemove') {
+	 		        coordsX = event.pageX;
+			        coordsY = event.pageY;               	
+                }   
+  
+ 		        y = (coordsY - startY);
+		        x = (coordsX - startX);
+
+		        if (Math.abs(x) > 20 || Math.abs(y) > 20) {
+		        	if (Math.abs(x) > Math.abs(y)) {
+		        		if (x > 0) {
+		        			direction = 'right'
+		        		} else {
+		        			direction = 'left'
+		        		}
+		        	} else {
+						if (y < 0) {
+		        			direction = 'up'
+		        		} else {
+		        			direction = 'down'
+		        		}
+		        	}
+		        	if (!scope.isProcessing) {
+		        		scope.rotateGestureVer2({start:direction,faceIndex:scope.faceIndex,innerFaceIndex:scope.innerFaceIndex})
+		        	}
+		        	
+
+
+		        	onDragRotateEnd(event);
+		        }
+
+		        
+
+		        /*
+				
+                cubeCtrl.passRotateData(x - padInitialPosition,y - padInitialPosition);
+                scope.$digest()
+*/
+            }
+
+            // Unbinds methods when touch interaction ends
+            function onDragRotateEnd(event) {
+                element.off('touchmove mousemove', onDragRotateMove);
+                element.off('touchend mouseup', onDragRotateEnd);
+            }
+
+
+
+
+
+
+
+
 		}
 	}
 })
 
-
+/*
 appDirtive.directive('controlPannel', function() {
 	return {
 		template: 
@@ -294,7 +394,7 @@ appDirtive.directive('controlPannel', function() {
 			'</control-pannel-button-group>',
 	    restrict: 'E'
 	}
-})
+})*/
 
 appDirtive.directive('controlPannelButtonGroup', function() {
 	return {
@@ -412,7 +512,7 @@ appDirtive.directive('rotateViewPannel', function() {
 
 			innertext.css({
 				position: 'absolute',
-				'font-size': '22px',
+				'font-size': '19px',
 				'font-weight':600,
 				left: padInitialPosition / 2 + 'px'
 
@@ -484,11 +584,32 @@ appDirtive.directive('rotateViewPannel', function() {
 	}
 })
 
+appDirtive.directive('rotateViewBtn', function() {
+	return {
+		template: '<div ng-repeat="buttonsValue in pannelButtonMaping3">' +
+			'<span ng-repeat="button in buttonsValue">' + 
+				'<button type="button" class="rotate-view-btn btn btn-default" ng-disabled= "isProcessing" ng-click="Notation(button.value)"><img ng-src="/css/img/{{button.value}}.gif"></button>' + 
+			'</span>' + 
+		'</div>',
+		restrict: 'E',
+	    link: function(scope, element, attributes) {
+	    	//Notation
+			element.css({
+				position: 'absolute',
+				left:'320px',
+				width:'200px'
+			})
+	    }
+	}
+})
+
+
 appDirtive.directive('timer', function($interval) {
 	return {
-		template: '<button type="button" class="btn btn-default" ng-click = "StartTimer()" ng-disabled="start">start</button><button type="button" class="btn btn-default" ng-click = "EndTimer()" ng-disabled="!start">stop</button></br><span>Timer: {{time | number: 2}} s</span>',
+		template: '<button type="button" class="btn btn-default" ng-click = "StartTimer()" ng-disabled="start">start</button><span> Time: {{time | number: 2}} s</span>',
 	    restrict: 'E',
-	    scope: true,
+	    //<button type="button" class="btn btn-default" ng-click = "EndTimer()" ng-disabled="!start">stop</button>
+	    //scope: true,
 	    link: function(scope, element, attributes) {
 
 			var num = element.find('span');
@@ -496,10 +617,11 @@ appDirtive.directive('timer', function($interval) {
 			element.css({
 				position: 'absolute',
 				display:'block',
-				width: '200px',
-				left:'405px',
-				top: '230px',
+				width: '300px',
+				left:'324px',
+				top: '145px',
 				'z-index':50,
+				color:'#D5D5D5'
 			})
 
 			var buttons = element.find('button');
@@ -518,13 +640,14 @@ appDirtive.directive('timer', function($interval) {
 	    	scope.paused = false;
 
 	    	scope.StartTimer = function() {
+	    		scope.$emit('startPlayCube', true)
 	    		scope.time = 0;
 	    		scope.start = true;
 				timerId = $interval(function() {
 					scope.time += 0.01; 
 			    }, 10);
 	    	}
-
+	    	/*
 	    	scope.PauseTimer = function() {
 	    		if (scope.paused) {
 	    			scope.paused = !scope.paused;
@@ -536,16 +659,120 @@ appDirtive.directive('timer', function($interval) {
 	    			$interval.cancel(timerId);
 	    		}
 	    		
-	    	}
+	    	}*/
 
 	    	scope.EndTimer = function() {
 	    		scope.start = false;
 	    		$interval.cancel(timerId);
 	    	}
 
+	    	scope.$on('checkCubeComplete', function(event, complete){
+	    		scope.EndTimer();	    		
+	    	});
+
 	    }
 	}
 })
 
 
+appDirtive.directive('viewAdjust', function($window) {
+	return {
+		restrict: 'A',
+	    link: function(scope, element, attributes) {
+			angular.element($window).bind('resize', function(){
+				scope.$broadcast('screenOrientation', $window.innerHeight)				
+			});
+	    }
+	}
+})
 
+app.directive('scrollto', function ($timeout) {
+  	return {
+	  	link: function(scope, element, attrs) {	  
+	  		scope.$watch(function() {
+	  			return element.attr('scrollto'); 
+	  		}, function(newValue) {
+
+	  			if ($('#solutionItem-' + newValue)[0] !== undefined) {
+	  				var scrollHeight = $('#solutionItem-' + newValue)[0].offsetTop;
+	  			}
+				$(element).animate({
+		            scrollTop : scrollHeight
+		        }, 200);
+
+	  		});
+
+/*
+	  		element.on('mousedown', function(event) {
+
+		        var pos = $("#test-6", $(element)).position().top + $(element).scrollTop() - $(element).position().top;
+		        console.log(pos);
+		        $(element).animate({
+		            scrollTop : pos
+		        }, 1000);
+	  		})*/
+	  	}
+
+  	}
+
+});
+
+appDirtive.directive('cubeDemo', ['$document', function($document) {
+	return {
+	    template: 
+	    '<div>' + 
+	    	'<cube-faces ng-repeat = "(faceIndex,innerFaceMaping) in facesMaping" faces-position = "faceIndex" is-safari = isSafari face-dimension = "cubeDimension">' + 
+	    		'<div cube-inner-container ng-repeat = "(innerFaceIndex, innerFaceData) in innerFaceMaping" face-index = "faceIndex" face-dimension = "cubeDimension" is-safari = "isSafari" spin-effect = "innerFaceData.spin">' + 
+	    			'<cube-inner-faces face-index = "faceIndex" inner-face-index = "innerFaceIndex" inner-face-data = "innerFaceData" face-dimension = "cubeDimension" class = "{{innerFaceData.value}}">' +
+					'</cube-inner-faces>' +
+				'</div>' +
+			'</cube-faces>' + 
+		'</div>',
+	    restrict: 'E',
+	    link: function(scope, element, attrs) {
+	    	var startX = 0, startY = 0;
+			//Cube rotate effect
+			var cube = element.find('div');
+			var rotateDegX = -20;
+			var rotateDegY = -45;
+			var rotatePreDegX, rotatePreDegY;
+			var cubeAdjustPosition = scope.cubeDimension;
+
+			function SetCubeView (rotateDegX, rotateDegY, scaleView){
+				var transformation = 'rotatex(' + rotateDegX + 'deg) rotatey(' + rotateDegY + 'deg) scale3d(' + scaleView + ',' + scaleView + ',' + scaleView +')';
+
+				cube.css({
+					position: 'relative',		
+					'transform-style':' preserve-3d',
+					'-webkit-transform-style': 'preserve-3d',
+					'-moz-transform-style': 'preserve-3d',
+
+			    	'-moz-transform': transformation,
+
+	                '-webkit-transform': transformation,
+
+				    '-o-transform': transformation,
+
+	                transform: transformation,
+
+	                
+
+					//width: scope.cubeDimension * 100 + 'px',
+					//height: scope.cubeDimension * 100 + 'px',
+	                //'transform-origin': scope.cubeDimension * 50 + 'px ' + scope.cubeDimension * 50 + 'px ' + '0',
+					//'-webkit-transform-origin': scope.cubeDimension * 50 + 'px ' + scope.cubeDimension * 50 + 'px ' + '0',
+
+				});
+			}
+			
+			scope.$watch('cubeDimension', function(newValue, oldValue) {
+				scaleView = 1 / newValue;
+	      		SetCubeView(rotateDegX, rotateDegY, scaleView);
+	      	});
+
+
+
+	    }
+	}
+
+}])
