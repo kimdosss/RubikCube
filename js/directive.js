@@ -671,7 +671,10 @@ appDirtive.directive('timer', function($interval) {
 	    	}
 
 	    	scope.$on('checkCubeComplete', function(event, complete){
-	    		scope.EndTimer();	    		
+	    		if (scope.start === true) {
+	    			scope.EndTimer();	
+	    		}
+	    		    		
 	    	});
 
 	    }
