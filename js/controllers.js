@@ -2,7 +2,7 @@ var appCon = angular.module('appCon', []);
 
 appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$stateParams','$state','$interval', function($scope,$timeout,$window,$document,$stateParams,$state,$interval){
 	//necessary varibles
-	$scope.animation_process_time = 250;//250
+	$scope.animation_process_time = 200;//250
 	$scope.isProcessing = false;
 	$scope.faceNum = 6;	
 	$scope.disableAimation = false;
@@ -12,9 +12,9 @@ appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$sta
 
 
 	$timeout(function () {
-		var dimension = parseInt($stateParams.dim);
+		var dimension = $stateParams.dim;		
 		if (dimension !== undefined) {
-			$scope.transformTo(dimension);
+			$scope.transformTo(parseInt(dimension));
 		} else {
 			var dim = Math.floor(Math.random() * 3) + 2;
 			$scope.transformTo(dim);
@@ -394,7 +394,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$sta
 		
 		$timeout(function () {			
       		$scope.CompleteMovement();
-  		}, $scope.animation_process_time);
+  		}, $scope.animation_process_time + 500);
 		
 	}
 
@@ -486,7 +486,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$sta
 					var col = $scope.rotateDragPosition[1] % $scope.cubeDimension;
 
 					var move = innerFaceIndex - $scope.rotateDragPosition[1],
-						dragDirection, axis, direction, layer;
+						dragDirection, axis, direction, layer;					
 					//move 1:right -1:left +dimension:down -dimension:up
 					switch (move) {
 					    case 1:
@@ -561,7 +561,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$sta
 							$timeout(function () {			
 					      		$scope.Rotate(axis, direction, layer);
 
-					  		}, 100);
+					  		}, 0);
 
 							
 						}
@@ -635,7 +635,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$sta
 				$timeout(function () {			
 		      		$scope.Rotate(axis, direction, layer);
 
-		  		}, 1);
+		  		}, 0);
 
 				
 			}
@@ -721,7 +721,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$sta
 		}
 		$timeout(function () {			
       		$scope.isProcessing = false;
-  		}, 50);
+  		}, 20);
 		
 	}
 
