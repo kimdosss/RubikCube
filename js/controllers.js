@@ -12,7 +12,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$sta
 
 
 	$timeout(function () {
-		var dimension = $stateParams.dim;
+		var dimension = parseInt($stateParams.dim);
 		if (dimension !== undefined) {
 			$scope.transformTo(dimension);
 		} else {
@@ -486,7 +486,7 @@ appCon.controller('cubeCon', ['$scope', '$timeout', '$window', '$document','$sta
 					var col = $scope.rotateDragPosition[1] % $scope.cubeDimension;
 
 					var move = innerFaceIndex - $scope.rotateDragPosition[1],
-						dragDirection, axis, direction, layer;					
+						dragDirection, axis, direction, layer;
 					//move 1:right -1:left +dimension:down -dimension:up
 					switch (move) {
 					    case 1:

@@ -7,7 +7,7 @@ appDirtive.directive('cube', ['$document', function($document) {
 	    	'<control-pannel pannel-button-maping = "cubeButtonMaping"></control-pannel>' +
 	    	'<cube-faces ng-repeat = "(faceIndex,innerFaceMaping) in facesMaping" faces-position = "faceIndex" is-safari = isSafari face-dimension = "cubeDimension">' + 
 	    		'<div cube-inner-container ng-repeat = "(innerFaceIndex, innerFaceData) in innerFaceMaping" face-index = "faceIndex" face-dimension = "cubeDimension" is-safari = "isSafari" spin-effect = "innerFaceData.spin">' + 
-	    			'<cube-inner-faces face-index = "faceIndex" inner-face-index = "innerFaceIndex" inner-face-data = "innerFaceData" face-dimension = "cubeDimension" rotate-gesture-ver2 = "rotateGestureVer2(start,faceIndex,innerFaceIndex)" is-processing = "isProcessing" class = "{{innerFaceData.value}}">' +
+	    			'<cube-inner-faces face-index = "faceIndex" inner-face-index = "innerFaceIndex" inner-face-data = "innerFaceData" face-dimension = "cubeDimension" rotate-gesture = "rotateGesture(start,faceIndex,innerFaceIndex)" is-processing = "isProcessing" class = "{{innerFaceData.value}}">' +
 					'</cube-inner-faces>' +
 				'</div>' +
 			'</cube-faces>' + 
@@ -253,6 +253,7 @@ appDirtive.directive('cubeInnerFaces', function() {
 	        innerFaceIndex: '=',
 	        innerFaceData: '=',
 	        rotateGestureVer2: '&',
+	        rotateGesture: '&',
 	        isProcessing:'='
 
 	    },	    
@@ -287,7 +288,7 @@ appDirtive.directive('cubeInnerFaces', function() {
 				height: height - borderWidth * 2 + 'px',
 	    	})
 
-			/*element.on('mousedown touchstart', function(event) {//
+			element.on('mousedown touchstart', function(event) {//
 		        // Prevent default dragging of selected content
 		        event.preventDefault();
 		        scope.rotateGesture({start:true,faceIndex:scope.faceIndex,innerFaceIndex:scope.innerFaceIndex})
@@ -301,7 +302,7 @@ appDirtive.directive('cubeInnerFaces', function() {
 				scope.rotateGesture({start:false,faceIndex:scope.faceIndex,innerFaceIndex:scope.innerFaceIndex})
 
 
-	      	});*/
+	      	});
 
 
 	      	
@@ -662,8 +663,11 @@ appDirtive.directive('timer', function($interval) {
 	    	}*/
 
 	    	scope.EndTimer = function() {
-	    		scope.start = false;
-	    		$interval.cancel(timerId);
+	    		if (timerId !== undefined) {
+					scope.start = false;
+		    		$interval.cancel(timerId);
+	    		}
+	    		
 	    	}
 
 	    	scope.$on('checkCubeComplete', function(event, complete){
