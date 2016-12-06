@@ -1028,7 +1028,7 @@ appCon.controller('viewCon', ['$scope', '$anchorScroll', '$location', '$statePar
 
 	$scope.$watchGroup(['viewScale', 'viewX', 'viewY'], function(newValue, oldValue){
 		cube.style.transform = 'scale(' + $scope.viewScale / 100 + ')' + 'translateX(' + $scope.viewX + 'px)' + 'translateY(' + $scope.viewY + 'px)';	
-	
+		cube.style.webkitTransform = 'scale(' + $scope.viewScale / 100 + ')' + 'translateX(' + $scope.viewX + 'px)' + 'translateY(' + $scope.viewY + 'px)';
 	});
 
 	$scope.$on('screenOrientation', function(event,screenHeight){
